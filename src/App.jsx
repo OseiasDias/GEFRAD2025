@@ -5,7 +5,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 
+
+const ProtectedRouteAdministrador = ({ children }) => {
+  const isAuthenticated = !!localStorage.getItem('authToken'); // Exemplo de verificação de autenticação
+  return isAuthenticated ? children : <Navigate to="/" />;
+};
+
+
 function App() {
+
+  
   return (
     <Router>
       <Routes>
