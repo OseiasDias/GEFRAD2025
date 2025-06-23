@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { FiLogIn } from "react-icons/fi";
-import LogoMarca from "../../assets/logotipo.png";
-import "../../css/Login.css";
+import LogoMarca from "../assets/logotipo.png";
+import "../css/Login.css";
 
 const AcessoOficina = () => {
     const [email, setEmail] = useState("");
