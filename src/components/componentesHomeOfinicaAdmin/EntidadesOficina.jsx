@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BiCompass } from "react-icons/bi";
-import { FaBullhorn, FaMapMarkerAlt,  FaUsers } from "react-icons/fa";
+import { FaBullhorn, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-
+import { FaMapLocation } from "react-icons/fa6";
 
 
 export default function EntidadesOficina() {
@@ -69,7 +68,7 @@ export default function EntidadesOficina() {
                         <div className="iconeFigura">
                             <div className="mx-auto fotoIcone">
                                 <FaUsers size={30} color="#EEF3F9" />
-                             
+
                             </div>
                         </div>
                         <div className="textFigura">
@@ -95,8 +94,8 @@ export default function EntidadesOficina() {
 
                         <div className="iconeFigura">
                             <div className="mx-auto fotoIcone">
-                                <FaBullhorn size={30} color="#EEF3F9"/>
-                             
+                                <FaBullhorn size={30} color="#EEF3F9" />
+
                             </div>
                         </div>
                         <div className="textFigura">
@@ -121,8 +120,8 @@ export default function EntidadesOficina() {
 
                         <div className="iconeFigura">
                             <div className="mx-auto fotoIcone">
-                                <FaMapMarkerAlt size={30} color="#EEF3F9"/>
-                          
+                                <FaMapMarkerAlt size={30} color="#EEF3F9" />
+
                             </div>
                         </div>
 
@@ -146,12 +145,15 @@ export default function EntidadesOficina() {
                     <div className="seccaoF d-flex h-100  justify-content-between">
                         <div className="iconeFigura">
                             <div className="mx-auto fotoIcone">
-                                <BiCompass size={30} color="#1bb394"/>
-                               
+                                <FaMapLocation size={30} color="#EEF3F9" />
+
+
+
+
                             </div>
                         </div>
                         <div className="textFigura">
-                            
+
                             <small className="text-end">Locais</small>
                             <h3 className="text-end mt-1">{totalOrdens}</h3>
                         </div>
