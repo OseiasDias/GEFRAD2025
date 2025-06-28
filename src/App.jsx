@@ -6,10 +6,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import AcessoOficina from "./page/pageAdmin/AcessoOficina.jsx";
 import HomeAdmin from './page/pageAdmin/HomeAdmin.jsx';
-import UsuariosApp from './page/pageAdmin/FuncionariosOficina.jsx';
-import Cronometro from './page/pageAdmin/CronometroIndividualOficina.jsx';
-import OrdensServicosOficina from './page/pageAdmin/OrdensServicosOficina.jsx';
-import  RelatoriosOficina from './page/pageAdmin/RelatoriosOficina.jsx';
+import UsuariosApp from './page/pageAdmin/Utilizadores.jsx';
+import ListarLocal from './page/pageAdmin/ListarLocais.jsx';
+
 
 import './App.css';
 
@@ -27,37 +26,33 @@ function App() {
     <Router>
       <Routes>
 
-        <Route path="/" element={<AcessoOficina />} />
+        <Route path="/" element={
 
-        <Route path="/homeAdmin" element={<HomeAdmin />} />
+          <AcessoOficina />
+
+        } />
+        <Route path="/homeAdmin" element={
+         
+            <HomeAdmin />
+
+    
+        } />
         <Route path="/pageTecnicos" element={
+        
+            <UsuariosApp />
 
-          <UsuariosApp />
-
-
+      
         } />
 
         {/**Routes de Add de Entidades */}
-        <Route path="/pageCronometroIndividual" element={
+        <Route path="/pageLocais" element={
+        
+            <ListarLocal />
 
-          <Cronometro />
-
+        
         } />
 
         {/**Routes de Add de Entidades */}
-        <Route path="/pageOrOficina" element={
-
-          <OrdensServicosOficina />
-
-        } />
-
-           {/**Routes de Add de Entidades */}
-               <Route path="/pageRelatorioOficina" element={
-             
-                  <RelatoriosOficina />
-            
-              } />
-
 
 
 

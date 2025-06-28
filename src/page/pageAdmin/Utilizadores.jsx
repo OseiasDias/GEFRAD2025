@@ -40,6 +40,7 @@ function ListaUtilizadores() {
   const [utilizadorParaDeletar, setUtilizadorParaDeletar] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const itemsPerPage = 10;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -87,21 +88,25 @@ function ListaUtilizadores() {
     setShowConfirmDelete(true);
   };
 
-  const handleDelete = async () => {
-    if (!utilizadorParaDeletar) return;
-    setIsDeleting(true);
-    try {
-      await axios.delete(`${API_URL}/utilizadores/${utilizadorParaDeletar.id}`);
-      setUtilizadores(prev => prev.filter(u => u.id !== utilizadorParaDeletar.id));
-      setShowConfirmDelete(false);
-      toast.success(`Utilizador ${utilizadorParaDeletar.nomeUsuario} removido com sucesso!`);
-    } catch (err) {
-      console.error('Erro ao deletar utilizador:', err);
-      toast.error('Erro ao remover o utilizador. Tente novamente.');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+const handleDelete = async () => {
+
+  if (!utilizadorParaDeletar) return;
+  setIsDeleting(true);
+  try {
+    await axios.delete(`${API_URL}/utilizadores/${encodeURIComponent(utilizadorParaDeletar.email)}`);
+    setUtilizadores(prev => prev.filter(u => u.email !== utilizadorParaDeletar.email));
+    setShowConfirmDelete(false);
+    toast.success(`Utilizador ${utilizadorParaDeletar.nomeUsuario} removido com sucesso!`);
+  } catch (err) {
+    console.error('Erro ao deletar utilizador:', err);
+    toast.error('Erro ao remover o utilizador. Tente novamente.');
+  } finally {
+    setIsDeleting(false);
+
+
+  }
+};
+
 
   const handleEditar = (id) => {
     navigate(`/editar-utilizador/${id}`);
@@ -448,8 +453,14 @@ function ListaUtilizadores() {
           <button className="btn btn-danger" onClick={handleDelete} disabled={isDeleting}>
             {isDeleting ? (
               <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Removendo...
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                /> {" "}
+                Excluindo...
               </>
             ) : (
               'Remover'
@@ -480,7 +491,7 @@ export function Copyright() {
 
 
 
-function FuncionariosOficina() {
+export default function FuncionariosOficina() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [activeItem, setActiveItem] = useState('dashboard');
@@ -523,10 +534,10 @@ function FuncionariosOficina() {
   const menuItems = [
     { id: 'painel', icon: <FaHome />, label: 'Painel', path: '/homeAdmin' },
     { id: 'Utilizadores', icon: <FaUsers />, label: 'Utilizadores', path: '/pageTecnicos' },
-    { id: 'Anuncios', icon: <FaBullhorn />, label: 'Anuncios', path: '/pageCronometroIndividual' },
-    { id: 'Locais', icon: <BiCompass />, label: 'Locais', path: '/pageOrOficina' },
-    { id: 'Localização', icon: <FaMapMarkerAlt />, label: 'Localização', path: '/pageRelatorioOficina' },
-    { id: 'Voltar', icon: <CiLogout />, label: 'Voltar', path: '/homeAdministrador' }
+    { id: 'Anuncios', icon: <FaBullhorn />, label: 'Anuncios', path: '' },
+    { id: 'Locais', icon: <BiCompass />, label: 'Locais', path: '' },
+    { id: 'Localização', icon: <FaMapMarkerAlt />, label: 'Localização', path: '/pageLocais' },
+    { id: 'Voltar', icon: <CiLogout />, label: 'Voltar', path: '' }
   ];
 
 
@@ -598,5 +609,3 @@ function FuncionariosOficina() {
     </>
   );
 }
-
-export default FuncionariosOficina;
