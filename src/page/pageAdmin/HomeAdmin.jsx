@@ -17,6 +17,7 @@ import { CiLogout } from "react-icons/ci";
 import GraficoTecnicos from '../../components/componentesHomeOfinicaAdmin/GraficoTecnicos';
 import Copyright from '../../components/componentesHomeOfinicaAdmin/Copyright.jsx';
 import { BiCompass } from 'react-icons/bi';
+import Calendar from '../../components/componentesHomeOfinicaAdmin/Calendario.jsx';
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 export default function HomeOficinaAdmin() {
@@ -139,6 +140,7 @@ export default function HomeOficinaAdmin() {
           <div className="content seccao-body h-100 container-fluid">
             <EntidadesOficina />
             <GraficoTecnicos />
+            <Calendar />
           </div>
         </main>
       </div>

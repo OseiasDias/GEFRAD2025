@@ -32,8 +32,9 @@ function App() {
 
         } />
         <Route path="/homeAdmin" element={
-         
+        
             <HomeAdmin />
+           
 
     
         } />

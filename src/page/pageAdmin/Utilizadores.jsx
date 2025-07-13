@@ -2,21 +2,21 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Form, Modal, Spinner } from 'react-bootstrap';
 
 // Ícones
 import {
   FaSearch, FaEdit, FaTrash, FaUser, FaPhone, FaBriefcase, FaEye, FaEllipsisV, FaBullhorn, FaMapMarkerAlt,
   FaUserShield, FaUserTie, FaUserCog, FaCheckCircle, FaBan, FaHourglassHalf, FaEnvelope,
-  FaHome, FaUsers, FaTools, FaChartBar, FaBars, FaChevronLeft, FaChevronRight
+  FaHome, FaUsers, FaTools, FaChartBar, FaBars, FaChevronLeft, FaChevronRight,
+  FaUserPlus
 } from 'react-icons/fa';
-import { FiEdit } from 'react-icons/fi';
 import { BiCompass } from 'react-icons/bi';
 import { MdAccountBalance, MdInfo, MdLocationOn, MdPerson2, MdTimer } from 'react-icons/md';
 import { CiLogout } from 'react-icons/ci';
 
 // Bootstrap
-import { Card, Col, Dropdown, Row, Spinner } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
+import { Card, Col, Dropdown, Row } from 'react-bootstrap';
 
 // Estilos e assets
 import '../../css/StylesFuncionario/homeOficinaAdmin.css';
@@ -41,13 +41,109 @@ function ListaUtilizadores() {
   const [isDeleting, setIsDeleting] = useState(false);
   const itemsPerPage = 10;
 
+  // Adicione esses novos estados
+  const [showAddAdminModal, setShowAddAdminModal] = useState(false);
+  const [newAdmin, setNewAdmin] = useState({
+    nomeUsuario: '',
+    email: '',
+    palavraPasse: '',
+    telefone: '',
+    tipo: 'ADMIN'
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [isAddingAdmin, setIsAddingAdmin] = useState(false);
+
+  // Função para adicionar administrador
+  const handleAddAdmin = async () => {
+    // Validação
+    const errors = {};
+    if (!newAdmin.nomeUsuario.trim()) errors.nomeUsuario = 'Nome é obrigatório';
+    if (!newAdmin.email.trim()) errors.email = 'Email é obrigatório';
+    if (!newAdmin.palavraPasse) errors.palavraPasse = 'Senha é obrigatória';
+    if (!newAdmin.telefone.trim()) errors.telefone = 'Telefone é obrigatório';
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setIsAddingAdmin(true);
+
+    try {
+      const adminData = {
+        nomeUsuario: newAdmin.nomeUsuario,
+        email: newAdmin.email,
+        palavraPasse: newAdmin.palavraPasse,
+        tipo: 'ADMIN',
+        perfis: [
+          {
+            chave: 'telefone',
+            valor: newAdmin.telefone
+          }
+        ]
+      };
+
+      const response = await axios.post(`${API_URL}/utilizadores/registar`, adminData);
+
+      // Atualiza a lista de utilizadores
+      setUtilizadores([...utilizadores, response.data]);
+
+
+      toast.success('Administrador adicionado com sucesso!');
+
+      // Espera 5 segundos (5000 milissegundos) antes de recarregar
+      setTimeout(() => {
+        window.location.reload();
+      }, 4000);
+
+
+    } catch (error) {
+      console.error('Erro ao adicionar administrador:', error);
+      const errorMessage = error.response?.data?.message ||
+        error.response?.data?.error ||
+        'Erro ao adicionar administrador';
+      toast.error(errorMessage);
+    } finally {
+      setIsAddingAdmin(false);
+    }
+  };
+
+  const resetAdminForm = () => {
+    setNewAdmin({
+      nomeUsuario: '',
+      email: '',
+      palavraPasse: '',
+      telefone: '',
+      tipo: 'ADMIN'
+    });
+    setFormErrors({});
+  };
+
+  const handleAdminInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewAdmin(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Limpa o erro quando o usuário começa a digitar
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  // No seu return, adicione o botão e o modal:
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUtilizadores = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_URL}/utilizadores/listar`);
+        const response = await axios.get(`${API_URL}/utilizadores`);
         setUtilizadores(response.data);
       } catch (err) {
         console.error('Erro ao buscar utilizadores:', err);
@@ -88,24 +184,24 @@ function ListaUtilizadores() {
     setShowConfirmDelete(true);
   };
 
-const handleDelete = async () => {
+  const handleDelete = async () => {
 
-  if (!utilizadorParaDeletar) return;
-  setIsDeleting(true);
-  try {
-    await axios.delete(`${API_URL}/utilizadores/${encodeURIComponent(utilizadorParaDeletar.email)}`);
-    setUtilizadores(prev => prev.filter(u => u.email !== utilizadorParaDeletar.email));
-    setShowConfirmDelete(false);
-    toast.success(`Utilizador ${utilizadorParaDeletar.nomeUsuario} removido com sucesso!`);
-  } catch (err) {
-    console.error('Erro ao deletar utilizador:', err);
-    toast.error('Erro ao remover o utilizador. Tente novamente.');
-  } finally {
-    setIsDeleting(false);
+    if (!utilizadorParaDeletar) return;
+    setIsDeleting(true);
+    try {
+      await axios.delete(`${API_URL}/utilizadores/${encodeURIComponent(utilizadorParaDeletar.email)}`);
+      setUtilizadores(prev => prev.filter(u => u.email !== utilizadorParaDeletar.email));
+      setShowConfirmDelete(false);
+      toast.success(`Utilizador ${utilizadorParaDeletar.nomeUsuario} removido com sucesso!`);
+    } catch (err) {
+      console.error('Erro ao deletar utilizador:', err);
+      toast.error('Erro ao remover o utilizador. Tente novamente.');
+    } finally {
+      setIsDeleting(false);
 
 
-  }
-};
+    }
+  };
 
 
   const handleEditar = (id) => {
@@ -120,15 +216,23 @@ const handleDelete = async () => {
   };
 
   const filteredUtilizadores = utilizadores.filter(utilizador => {
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      utilizador.nomeUsuario.toLowerCase().includes(searchLower) ||
-      (utilizador.email && utilizador.email.toLowerCase().includes(searchLower)) ||
-      (utilizador.perfis && utilizador.perfis.some(perfil =>
-        perfil.valor && perfil.valor.toLowerCase().includes(searchLower)
-      ))
-    );
-  });
+  const searchLower = searchTerm.toLowerCase();
+  return (
+    utilizador.nomeUsuario.toLowerCase().includes(searchLower) ||
+    (utilizador.email && utilizador.email.toLowerCase().includes(searchLower)) ||
+    (utilizador.perfis && utilizador.perfis.some(perfil =>
+      perfil.valor && perfil.valor.toLowerCase().includes(searchLower)
+    ))
+  );
+});
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    setSearchTerm(searchTerm);  // Atualize o valor da pesquisa
+  }, 300);  // 300ms de atraso
+
+  return () => clearTimeout(timeoutId); // Limpa o timeout anterior
+}, [searchTerm]);
+
 
   const totalPages = Math.ceil(filteredUtilizadores.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -217,6 +321,20 @@ const handleDelete = async () => {
   return (
     <>
       <div className="funcionarios-page container-fluid p-4">
+        {/* Adicione este botão no cabeçalho (ajuste conforme seu layout) */}
+        <div className="row mb-4 ">
+          <div className="col-12 d-flex justify-content-between align-items-center">
+
+            <button
+              className="btn btn-primary ms-auto"
+              onClick={() => setShowAddAdminModal(true)}
+              disabled={loading}
+            >
+              <FaUserPlus className="me-2" />
+              Adicionar Administrador
+            </button>
+          </div>
+        </div>
         <div className="row mb-4">
           <div className="col-12">
             <h3 className="text-white mb-4">Lista de Utilizadores</h3>
@@ -233,6 +351,8 @@ const handleDelete = async () => {
               </div>
             </div>
           </div>
+
+
         </div>
 
         <div className="table-responsive">
@@ -291,7 +411,7 @@ const handleDelete = async () => {
                           <FaEye className="me-2" /> Visualizar
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => handleEditar(utilizador.id)}>
-                          <FaEdit className="me-2" /> Editar
+                          <FaEdit className="me-2" /> Desativar ou Ativar
                         </Dropdown.Item>
                         <Dropdown.Item
                           className="text-danger"
@@ -310,6 +430,125 @@ const handleDelete = async () => {
 
         {totalPages > 1 && renderPagination()}
       </div>
+
+<Modal
+  show={showAddAdminModal}
+  onHide={() => {
+    setShowAddAdminModal(false);
+    resetAdminForm();
+  }}
+  size="lg"
+  centered
+>
+  <Modal.Header closeButton className="bg-primary text-white">
+    <Modal.Title>Adicionar Novo Administrador</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+      <div className="row">
+        <div className="col-lg-6 mb-3">
+          <Form.Group>
+            <Form.Label>Nome Completo *</Form.Label>
+            <Form.Control
+              type="text"
+              name="nomeUsuario"
+              placeholder="Digite o nome completo"
+              value={newAdmin.nomeUsuario}
+              onChange={handleAdminInputChange}
+              isInvalid={!!formErrors.nomeUsuario}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formErrors.nomeUsuario}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </div>
+
+        <div className="col-lg-6 mb-3">
+          <Form.Group>
+            <Form.Label>Email *</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              placeholder="Digite o email"
+              value={newAdmin.email}
+              onChange={handleAdminInputChange}
+              isInvalid={!!formErrors.email}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formErrors.email}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </div>
+
+        <div className="col-lg-6 mb-3">
+          <Form.Group>
+            <Form.Label>Senha *</Form.Label>
+            <Form.Control
+              type="password"
+              name="palavraPasse"
+              placeholder="Digite a senha"
+              value={newAdmin.palavraPasse}
+              onChange={handleAdminInputChange}
+              isInvalid={!!formErrors.palavraPasse}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formErrors.palavraPasse}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </div>
+
+        <div className="col-lg-6 mb-3">
+          <Form.Group>
+            <Form.Label>Telefone *</Form.Label>
+            <Form.Control
+              type="text"
+              name="telefone"
+              placeholder="Digite o telefone"
+              value={newAdmin.telefone}
+              onChange={handleAdminInputChange}
+              isInvalid={!!formErrors.telefone}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formErrors.telefone}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </div>
+      </div>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <button
+      className="btn btn-secondary"
+      onClick={() => {
+        setShowAddAdminModal(false);
+        resetAdminForm();
+      }}
+      disabled={isAddingAdmin}
+    >
+      Cancelar
+    </button>
+    <button
+      className="btn btn-primary"
+      onClick={handleAddAdmin}
+      disabled={isAddingAdmin}
+    >
+      {isAddingAdmin ? (
+        <>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />{" "}
+          Salvando...
+        </>
+      ) : (
+        "Salvar"
+      )}
+    </button>
+  </Modal.Footer>
+</Modal>
 
 
       {/* Modal de Visualização */}
@@ -339,9 +578,9 @@ const handleDelete = async () => {
                       <Card.Text className="mt-3 d-inline-block">
                         <strong>{mostrarOuNao(dados.nomeUsuario)}</strong><br />
                         <span className={`badge d-flex align-items-center gap-1 mt-2 ${dados.tipo === 'CLIENTE' ? 'bg-primary' :
-                            dados.tipo === 'ADMIN' ? 'bg-danger' :
-                              dados.tipo === 'TECNICO' ? 'bg-warning text-dark' :
-                                'bg-secondary'
+                          dados.tipo === 'ADMIN' ? 'bg-danger' :
+                            dados.tipo === 'TECNICO' ? 'bg-warning text-dark' :
+                              'bg-secondary'
                           }`}>
                           {dados.tipo === 'CLIENTE' && <FaUser />}
                           {dados.tipo === 'ADMIN' && <FaUserShield />}
@@ -366,9 +605,9 @@ const handleDelete = async () => {
                           <p><strong>Email:</strong> {mostrarOuNao(dados.email)}</p>
                           <p><strong>Tipo:</strong>
                             <span className={`ms-2 badge d-inline-block align-items-center gap-1 ${dados.tipo === 'CLIENTE' ? 'bg-primary' :
-                                dados.tipo === 'ADMIN' ? 'bg-danger' :
+                              dados.tipo === 'ADMIN' ? 'bg-danger' :
                                 dados.tipo === 'TECNICO' ? 'bg-warning text-dark' :
-                                    'bg-secondary'
+                                  'bg-secondary'
                               }`}>
                               {dados.tipo === 'CLIENTE' && <FaUser />}
                               {dados.tipo === 'ADMIN' && <FaUserShield />}
@@ -380,9 +619,9 @@ const handleDelete = async () => {
                         <Col md={6}>
                           <p><strong>Estado:</strong>
                             <span className={`ms-2 badge d-inline-block align-items-center gap-1 ${dados.estado === 'ATIVO' ? 'bg-success' :
-                                dados.estado === 'BLOQUEADO' ? 'bg-danger' :
-                                  dados.estado === 'PENDENTE' ? 'bg-warning text-dark' :
-                                    'bg-secondary'
+                              dados.estado === 'BLOQUEADO' ? 'bg-danger' :
+                                dados.estado === 'PENDENTE' ? 'bg-warning text-dark' :
+                                  'bg-secondary'
                               }`}>
                               {dados.estado === 'ATIVO' && <FaCheckCircle />}
                               {dados.estado === 'BLOQUEADO' && <FaBan />}
@@ -424,10 +663,7 @@ const handleDelete = async () => {
           ) : null}
         </Modal.Body>
         <Modal.Footer className='py-0 d-flex justify-content-between'>
-          <div></div>
-          <button className='btn btn-primary px-3' onClick={() => handleEditar(idUtilizador)}>
-            Editar <FiEdit fontSize={13} />
-          </button>
+            <img src={logotipo} alt="..." className='mx-auto d-block mb-2' style={{maxWidth:"220px"} } />
         </Modal.Footer>
       </Modal>
 
