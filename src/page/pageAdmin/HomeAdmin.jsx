@@ -75,7 +75,7 @@ export default function HomeOficinaAdmin() {
   const menuItems = [
     { id: 'painel', icon: <FaHome />, label: 'Painel', path: '/homeAdmin' },
     { id: 'Utilizadores', icon: <FaUsers />, label: 'Utilizadores', path: '/pageTecnicos' },
-    { id: 'Anuncios', icon: <FaBullhorn />, label: 'Anuncios', path: null  },
+    { id: 'Anuncios', icon: <FaBullhorn />, label: 'Anuncios', path: '/pageAnuncios'  },
     { id: 'Locais', icon: <BiCompass />, label: 'Locais', path: null },
     { id: 'Localização', icon: <FaMapMarkerAlt />, label: 'Localização', path: '/pageLocais' },
     { id: 'Sair', icon: <CiLogout />, label: 'Sair', path: null }

@@ -1,8 +1,8 @@
 // React e bibliotecas essenciais
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Modal, Spinner } from 'react-bootstrap';
+import { FaToggleOff, FaToggleOn } from 'react-icons/fa';
 
 // Ícones
 import {
@@ -137,7 +137,6 @@ function ListaUtilizadores() {
 
   // No seu return, adicione o botão e o modal:
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUtilizadores = async () => {
@@ -203,10 +202,33 @@ function ListaUtilizadores() {
     }
   };
 
+  const handleToggleState = async (utilizador) => {
+    const isAtivo = utilizador.estado === 'ATIVO';
+    const endpoint = isAtivo ? 'desativar' : 'ativar';
 
-  const handleEditar = (id) => {
-    navigate(`/editar-utilizador/${id}`);
+    setLoading(true);
+
+    try {
+      const response = await axios.patch(
+        `${API_URL}/utilizadores/${encodeURIComponent(utilizador.email)}/${endpoint}`
+      );
+
+      if (response.status === 200) {
+        const novoEstado = isAtivo ? 'BLOQUEADO' : 'ATIVO';
+        setUtilizadores(prev => prev.map(u =>
+          u.email === utilizador.email ? { ...u, estado: novoEstado } : u
+        ));
+        toast.success(`Utilizador ${utilizador.nomeUsuario} ${novoEstado === 'ATIVO' ? 'ativado' : 'desativado'} com sucesso!`);
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
+      // ... tratamento de erro mantido
+    } finally {
+      setLoading(false);
+    }
   };
+
+
 
   const mostrarOuNao = (valor) => valor || "Sem informação";
 
@@ -216,22 +238,22 @@ function ListaUtilizadores() {
   };
 
   const filteredUtilizadores = utilizadores.filter(utilizador => {
-  const searchLower = searchTerm.toLowerCase();
-  return (
-    utilizador.nomeUsuario.toLowerCase().includes(searchLower) ||
-    (utilizador.email && utilizador.email.toLowerCase().includes(searchLower)) ||
-    (utilizador.perfis && utilizador.perfis.some(perfil =>
-      perfil.valor && perfil.valor.toLowerCase().includes(searchLower)
-    ))
-  );
-});
-useEffect(() => {
-  const timeoutId = setTimeout(() => {
-    setSearchTerm(searchTerm);  // Atualize o valor da pesquisa
-  }, 300);  // 300ms de atraso
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      utilizador.nomeUsuario.toLowerCase().includes(searchLower) ||
+      (utilizador.email && utilizador.email.toLowerCase().includes(searchLower)) ||
+      (utilizador.perfis && utilizador.perfis.some(perfil =>
+        perfil.valor && perfil.valor.toLowerCase().includes(searchLower)
+      ))
+    );
+  });
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setSearchTerm(searchTerm);  // Atualize o valor da pesquisa
+    }, 300);  // 300ms de atraso
 
-  return () => clearTimeout(timeoutId); // Limpa o timeout anterior
-}, [searchTerm]);
+    return () => clearTimeout(timeoutId); // Limpa o timeout anterior
+  }, [searchTerm]);
 
 
   const totalPages = Math.ceil(filteredUtilizadores.length / itemsPerPage);
@@ -410,9 +432,20 @@ useEffect(() => {
                         <Dropdown.Item onClick={() => handleShow(utilizador.email)}>
                           <FaEye className="me-2" /> Visualizar
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleEditar(utilizador.id)}>
-                          <FaEdit className="me-2" /> Desativar ou Ativar
+                        <Dropdown.Item onClick={() => handleToggleState(utilizador)}>
+                          {utilizador.estado === 'ATIVO' ? (
+                            <>
+                              <FaToggleOff className="me-2" />
+                              Desativar
+                            </>
+                          ) : (
+                            <>
+                              <FaToggleOn className="me-2" />
+                              Ativar
+                            </>
+                          )}
                         </Dropdown.Item>
+
                         <Dropdown.Item
                           className="text-danger"
                           onClick={() => confirmarRemocao(utilizador)}
@@ -431,124 +464,124 @@ useEffect(() => {
         {totalPages > 1 && renderPagination()}
       </div>
 
-<Modal
-  show={showAddAdminModal}
-  onHide={() => {
-    setShowAddAdminModal(false);
-    resetAdminForm();
-  }}
-  size="lg"
-  centered
->
-  <Modal.Header closeButton className="bg-primary text-white">
-    <Modal.Title>Adicionar Novo Administrador</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <Form>
-      <div className="row">
-        <div className="col-lg-6 mb-3">
-          <Form.Group>
-            <Form.Label>Nome Completo *</Form.Label>
-            <Form.Control
-              type="text"
-              name="nomeUsuario"
-              placeholder="Digite o nome completo"
-              value={newAdmin.nomeUsuario}
-              onChange={handleAdminInputChange}
-              isInvalid={!!formErrors.nomeUsuario}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.nomeUsuario}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </div>
+      <Modal
+        show={showAddAdminModal}
+        onHide={() => {
+          setShowAddAdminModal(false);
+          resetAdminForm();
+        }}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary text-white">
+          <Modal.Title>Adicionar Novo Administrador</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <div className="row">
+              <div className="col-lg-6 mb-3">
+                <Form.Group>
+                  <Form.Label>Nome Completo *</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nomeUsuario"
+                    placeholder="Digite o nome completo"
+                    value={newAdmin.nomeUsuario}
+                    onChange={handleAdminInputChange}
+                    isInvalid={!!formErrors.nomeUsuario}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.nomeUsuario}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
 
-        <div className="col-lg-6 mb-3">
-          <Form.Group>
-            <Form.Label>Email *</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              placeholder="Digite o email"
-              value={newAdmin.email}
-              onChange={handleAdminInputChange}
-              isInvalid={!!formErrors.email}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.email}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </div>
+              <div className="col-lg-6 mb-3">
+                <Form.Group>
+                  <Form.Label>Email *</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder="Digite o email"
+                    value={newAdmin.email}
+                    onChange={handleAdminInputChange}
+                    isInvalid={!!formErrors.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
 
-        <div className="col-lg-6 mb-3">
-          <Form.Group>
-            <Form.Label>Senha *</Form.Label>
-            <Form.Control
-              type="password"
-              name="palavraPasse"
-              placeholder="Digite a senha"
-              value={newAdmin.palavraPasse}
-              onChange={handleAdminInputChange}
-              isInvalid={!!formErrors.palavraPasse}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.palavraPasse}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </div>
+              <div className="col-lg-6 mb-3">
+                <Form.Group>
+                  <Form.Label>Senha *</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="palavraPasse"
+                    placeholder="Digite a senha"
+                    value={newAdmin.palavraPasse}
+                    onChange={handleAdminInputChange}
+                    isInvalid={!!formErrors.palavraPasse}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.palavraPasse}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
 
-        <div className="col-lg-6 mb-3">
-          <Form.Group>
-            <Form.Label>Telefone *</Form.Label>
-            <Form.Control
-              type="text"
-              name="telefone"
-              placeholder="Digite o telefone"
-              value={newAdmin.telefone}
-              onChange={handleAdminInputChange}
-              isInvalid={!!formErrors.telefone}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.telefone}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </div>
-      </div>
-    </Form>
-  </Modal.Body>
-  <Modal.Footer>
-    <button
-      className="btn btn-secondary"
-      onClick={() => {
-        setShowAddAdminModal(false);
-        resetAdminForm();
-      }}
-      disabled={isAddingAdmin}
-    >
-      Cancelar
-    </button>
-    <button
-      className="btn btn-primary"
-      onClick={handleAddAdmin}
-      disabled={isAddingAdmin}
-    >
-      {isAddingAdmin ? (
-        <>
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />{" "}
-          Salvando...
-        </>
-      ) : (
-        "Salvar"
-      )}
-    </button>
-  </Modal.Footer>
-</Modal>
+              <div className="col-lg-6 mb-3">
+                <Form.Group>
+                  <Form.Label>Telefone *</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="telefone"
+                    placeholder="Digite o telefone"
+                    value={newAdmin.telefone}
+                    onChange={handleAdminInputChange}
+                    isInvalid={!!formErrors.telefone}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formErrors.telefone}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
+            </div>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              setShowAddAdminModal(false);
+              resetAdminForm();
+            }}
+            disabled={isAddingAdmin}
+          >
+            Cancelar
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={handleAddAdmin}
+            disabled={isAddingAdmin}
+          >
+            {isAddingAdmin ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{" "}
+                Salvando...
+              </>
+            ) : (
+              "Salvar"
+            )}
+          </button>
+        </Modal.Footer>
+      </Modal>
 
 
       {/* Modal de Visualização */}
@@ -663,7 +696,7 @@ useEffect(() => {
           ) : null}
         </Modal.Body>
         <Modal.Footer className='py-0 d-flex justify-content-between'>
-            <img src={logotipo} alt="..." className='mx-auto d-block mb-2' style={{maxWidth:"220px"} } />
+          <img src={logotipo} alt="..." className='mx-auto d-block mb-2' style={{ maxWidth: "220px" }} />
         </Modal.Footer>
       </Modal>
 

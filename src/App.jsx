@@ -8,6 +8,8 @@ import AcessoOficina from "./page/pageAdmin/AcessoOficina.jsx";
 import HomeAdmin from './page/pageAdmin/HomeAdmin.jsx';
 import UsuariosApp from './page/pageAdmin/Utilizadores.jsx';
 import ListarLocal from './page/pageAdmin/ListarLocais.jsx';
+import Anuncios from './page/pageAdmin/ListarAnuncios.jsx';
+
 
 
 import './App.css';
@@ -41,6 +43,11 @@ function App() {
         <Route path="/pageTecnicos" element={
         
             <UsuariosApp />
+        } />
+
+          <Route path="/pageAnuncios" element={
+        
+            <Anuncios />
 
       
         } />
