@@ -225,12 +225,12 @@ html::-webkit-scrollbar {
 .ikone{
   color: var(--corPrimaria);
   display: block;
-  margin:15px auto;
+  margin:15px auto; 
   font-size: 1.5em;
 }
 
 .box-icon{
-  background-color: rgba(0,0,0,.1);
+  background-color: rgba(0, 0, 0, 0.102);
   display: block;
   margin:10px auto !important;
   padding:5px 15px;

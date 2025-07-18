@@ -6,3 +6,11 @@
 .fundoFooter {
     margin-bottom: -40px !important;
  }
+
+ .profile-section {
+
+ cursor: pointer;}
+
+  .profile-section:hover{
+    background-color:  #1bb39433;
+ }

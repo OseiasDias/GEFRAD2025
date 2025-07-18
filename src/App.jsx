@@ -9,7 +9,9 @@ import HomeAdmin from './page/pageAdmin/HomeAdmin.jsx';
 import UsuariosApp from './page/pageAdmin/Utilizadores.jsx';
 import ListarLocal from './page/pageAdmin/ListarLocais.jsx';
 import Anuncios from './page/pageAdmin/ListarAnuncios.jsx';
+import EditarFucionario from './page/pageAdmin/PageEditar/EditarPerfil.jsx';
 
+        
 
 
 import './App.css';
@@ -70,6 +72,20 @@ function App() {
 
 
         } />
+
+
+
+           {/**Routes de Add de Entidades */}
+        <Route path="pageEditPerfil/:id" element={
+
+
+          <ProtectedRouteAdministrador>
+            <EditarFucionario />
+          </ProtectedRouteAdministrador>
+
+
+        } />
+
 
         {/**Routes de Add de Entidades */}
 
