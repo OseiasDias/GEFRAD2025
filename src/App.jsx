@@ -16,7 +16,7 @@ import './App.css';
 
 
 const ProtectedRouteAdministrador = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem('authToken'); // Exemplo de verificação de autenticação
+  const isAuthenticated = !!localStorage.getItem('token');
   return isAuthenticated ? children : <Navigate to="/" />;
 };
 
@@ -33,31 +33,42 @@ function App() {
           <AcessoOficina />
 
         } />
-        <Route path="/homeAdmin" element={
-        
-            <HomeAdmin />
-           
 
-    
-        } />
+        <Route
+          path="/homeAdmin"
+          element={
+            <ProtectedRouteAdministrador>
+              <HomeAdmin />
+            </ProtectedRouteAdministrador>
+          }
+        />
+
+
         <Route path="/pageTecnicos" element={
-        
+          <ProtectedRouteAdministrador>
             <UsuariosApp />
+          </ProtectedRouteAdministrador>
+
         } />
 
-          <Route path="/pageAnuncios" element={
-        
+        <Route path="/pageAnuncios" element={
+          <ProtectedRouteAdministrador>
             <Anuncios />
+          </ProtectedRouteAdministrador>
 
-      
+
+
         } />
 
         {/**Routes de Add de Entidades */}
         <Route path="/pageLocais" element={
-        
-            <ListarLocal />
 
-        
+
+          <ProtectedRouteAdministrador>
+            <ListarLocal />
+          </ProtectedRouteAdministrador>
+
+
         } />
 
         {/**Routes de Add de Entidades */}

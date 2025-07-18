@@ -20,7 +20,7 @@ const API_URL = 'http://localhost:8080/api';
 
 const COLORS = ['#1bb394', '#23c6c8', '#f8ac59', '#ed5565', '#1c84c6'];
 
-const GraficoFuncionarios = () => {
+const GraficoUsuabilidade = () => {
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -131,4 +131,4 @@ const GraficoFuncionarios = () => {
   );
 };
 
-export default GraficoFuncionarios;
+export default GraficoUsuabilidade;

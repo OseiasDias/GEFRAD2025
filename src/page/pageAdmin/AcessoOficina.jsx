@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FiLogIn } from "react-icons/fi";
 import LogoMarca from "../../assets/logotipo.png";
 import "../../css/Login.css";
-
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [palavraPasse, setPalavraPasse] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,14 +25,10 @@ const Login = () => {
         palavraPasse,
       });
 
-      // ✅ Resposta esperada: { token, idSessao, utilizador }
       console.log('[Login] Login bem-sucedido:', response.data);
-
-      // Armazena o JWT localmente (opcional)
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('idSessao', response.data.idSessao);
 
-        // Redireciona ou faz algo:
       navigate('/homeAdmin');
 
     } catch (error) {
@@ -44,7 +40,7 @@ const Login = () => {
   };
 
   return (
-   <div className="login-container w-100">
+    <div className="login-container w-100">
       <div className="login-box">
         <div className="login-header">
           <img src={LogoMarca} alt="Logo Turbo" className="login-logo" />
@@ -56,37 +52,50 @@ const Login = () => {
             Digite seu e-mail e senha para acessar o painel administrativo web
           </p>
         </div>
-      <form onSubmit={handleLogin}>
-        <div className="mb-3">
-          <label className="form-label">Email:</label>
-          <input
-            type="email"
-            className="form-control"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="seu@email.com"
-          />
-        </div>
 
-        <div className="mb-3">
-          <label className="form-label">Senha:</label>
-          <input
-            type="password"
-            className="form-control"
-            value={palavraPasse}
-            onChange={(e) => setPalavraPasse(e.target.value)}
-            required
-            placeholder="Digite sua senha"
-          />
-        </div>
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <label className="form-label">Email:</label>
+            <input
+              type="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="seu@email.com"
+            />
+          </div>
 
-        {erro && <div className="alert alert-danger">{erro}</div>}
+          {/* Campo de senha com botão de exibir/ocultar */}
+          <div className="mb-3 position-relative">
+            <label className="form-label">Senha:</label>
+            <div className="input-group d-flex justify-content-between">
+              <input
+                type={mostrarSenha ? 'text' : 'password'}
+                className="form-control w-75"
+                value={palavraPasse}
+                onChange={(e) => setPalavraPasse(e.target.value)}
+                required
+                placeholder="Digite sua senha"
+              />
+              <button
+                type="button"
+                className="input-group-text w5 bg-white border-start-0"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                style={{ cursor: 'pointer' }}
+              >
+                {mostrarSenha ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
 
-        <button type="submit" className="login-btn mt-4" disabled={loading}>
-          {loading ? 'Entrando...' : 'Entrar'}
-        </button>
-      </form>
+
+          {erro && <div className="alert alert-danger">{erro}</div>}
+          <button type="submit" className="login-btn mt-4" disabled={loading}>
+            {loading ? 'Entrando...' : 'Entrar'}
+          </button>
+
+        </form>
       </div>
     </div>
   );
