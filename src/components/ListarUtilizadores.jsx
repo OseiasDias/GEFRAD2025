@@ -600,7 +600,7 @@ export default function ListaUtilizadores() {
                     <Card.Body>
                       <Row>
                         <Col md={6}>
-                          <p><strong>Numero do Utilizador:</strong><b>UT00{mostrarOuNao(dados.id)}</b></p>
+                          <p><strong>Nº Utilizador: </strong><b>UT00{mostrarOuNao(dados.id)}</b></p>
                           <p><strong>Email:</strong> {mostrarOuNao(dados.email)}</p>
                           <p><strong>Tipo:</strong>
                             <span className={`ms-2 badge d-inline-block align-items-center gap-1 ${dados.tipo === 'CLIENTE' ? 'bg-primary' :

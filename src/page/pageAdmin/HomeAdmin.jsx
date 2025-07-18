@@ -1,13 +1,13 @@
 import MenuPrincipal from '../../components/MenuPrincipal.jsx';
-import EntidadesOficina from '../../components/componentesHomeOfinicaAdmin/EntidadesOficina';
-import GraficoUsuabilidade from '../../components/componentesHomeOfinicaAdmin/GraficoUsuabilidade.jsx';
-import Calendar from '../../components/componentesHomeOfinicaAdmin/Calendario';
+import EntidadesPrincipal from '../../components/componentesHomeAdmin/EntidadesPrincipal.jsx';
+import GraficoUsuabilidade from '../../components/componentesHomeAdmin/GraficoUsuabilidade.jsx';
+import Calendar from '../../components/componentesHomeAdmin/Calendario.jsx';
 
 export default function HomeOficinaAdmin() {
   return (
     <>
       < MenuPrincipal >
-        <EntidadesOficina />
+        <EntidadesPrincipal />
         <GraficoUsuabilidade />
         <Calendar />
       </ MenuPrincipal >

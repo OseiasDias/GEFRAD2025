@@ -4,7 +4,7 @@ import { FaBullhorn,  FaUsers } from "react-icons/fa";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { FaEnvelopeCircleCheck } from "react-icons/fa6";
 
-export default function EntidadesOficina() {
+export default function EntidadesPrincipal() {
 
   const [totalUtilizadores, setTotalUtilizadores] = useState(0);
   const [totalAnuncios, setTotalAnuncios] = useState(0);
