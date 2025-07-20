@@ -6,6 +6,9 @@ import LogoMarca from "../../assets/logotipo.png";
 import "../../css/Login.css";
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [palavraPasse, setPalavraPasse] = useState('');
@@ -14,30 +17,48 @@ const Login = () => {
   const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setErro('');
-    setLoading(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setErro('');
+  setLoading(true);
 
-    try {
-      const response = await axios.post('http://localhost:8080/api/utilizadores/login', {
-        email,
-        palavraPasse,
-      });
+  try {
+    const response = await axios.post((`${API_URL}/utilizadores/login`), {
+      email,
+      palavraPasse,
+    });
 
-      console.log('[Login] Login bem-sucedido:', response.data);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('idSessao', response.data.idSessao);
+    console.log('[Login] Resposta completa:', response.data);
 
-      navigate('/homeAdmin');
+    const data = response.data;
 
-    } catch (error) {
-      console.error('[Login] Erro ao fazer login:', error);
-      setErro(error.response?.data?.message || 'Email ou senha inválidos.');
-    } finally {
-      setLoading(false);
+    // Logs detalhados
+    console.log('[Login] data.user:', data.user);
+    console.log('[Login] data.user.tipo:', data.user?.tipo);
+
+    if (data.user && data.user.tipo === "ADMIN") {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('idSessao', data.idSessao);
+
+      console.log('[Login] Login autorizado! Redirecionando em 15 segundos...');
+
+   
+        navigate('/homeAdmin');
+    
+
+    } else {
+      console.log('[Login] Tipo de utilizador não permitido:', data.user?.tipo);
+      setErro('Você não tem permissão para acessar esta área.');
     }
-  };
+
+  } catch (error) {
+    console.error('[Login] Erro ao fazer login:', error);
+    setErro(error.response?.data?.message || 'Email ou senha inválidos.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="login-container w-100">
