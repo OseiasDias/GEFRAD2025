@@ -11,7 +11,7 @@ import ListarLocal from './page/pageAdmin/ListarLocais.jsx';
 import Anuncios from './page/pageAdmin/ListarAnuncios.jsx';
 import EditarFucionario from './page/pageAdmin/PageEditar/EditarPerfil.jsx';
 
-        
+
 
 
 import './App.css';
@@ -37,13 +37,14 @@ function App() {
         } />
 
         <Route
-          path="/homeAdmin"
+          path="/homeAdmin/:email"
           element={
             <ProtectedRouteAdministrador>
               <HomeAdmin />
             </ProtectedRouteAdministrador>
           }
         />
+
 
 
         <Route path="/pageTecnicos" element={
@@ -75,7 +76,7 @@ function App() {
 
 
 
-           {/**Routes de Add de Entidades */}
+        {/**Routes de Add de Entidades */}
         <Route path="pageEditPerfil/:id" element={
 
 

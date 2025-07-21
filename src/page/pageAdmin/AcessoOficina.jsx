@@ -43,7 +43,7 @@ const handleLogin = async (e) => {
       console.log('[Login] Login autorizado! Redirecionando em 15 segundos...');
 
    
-        navigate('/homeAdmin');
+navigate(`/homeAdmin/${encodeURIComponent(email)}`);
     
 
     } else {
@@ -83,7 +83,7 @@ const handleLogin = async (e) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="seu@email.com"
+              placeholder="Digite seu email"
             />
           </div>
 
