@@ -2,24 +2,23 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   FaSearch,
-  FaUser, FaEye,  FaUsers,  FaChartBar,
+  FaUser, FaEye, FaUsers, FaChartBar,
   FaChevronLeft, FaChevronRight,
-
   FaMapMarkerAlt
 } from 'react-icons/fa';
 import { MdAddLocationAlt, MdTimer } from 'react-icons/md';
 import { Modal, Spinner } from 'react-bootstrap';
-//import logotipo from "../../assets/logotipo.png";
+import logotipo from "../assets/logotipo.png";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import FormCadastroLocal from './componentesHomeAdmin/ModalCadastroLocal.jsx';
 // React e bibliotecas essenciais 
 import { useNavigate } from 'react-router-dom';
 
 // Ícones
 import {
   FaEdit, FaTrash, FaEllipsisV,
-  
+
   FaWifi
 } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
@@ -27,7 +26,7 @@ import { MdAccountBalance, MdInfo, MdLocationOn, MdPerson2 } from 'react-icons/m
 
 // Bootstrap
 import { Card, Col, Dropdown, Row, } from 'react-bootstrap';
-
+//import logo from '../assets/logotipo.png';
 // Estilos e assets
 import '../css/StylesFuncionario/homeOficinaAdmin.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -48,6 +47,7 @@ export default function ListaLocais() {
   const [localParaDeletar, setLocalParaDeletar] = useState(null);
   const [isDeleting, setIsDeletando] = useState(false);
   const itemsPerPage = 10;
+  const [showModalCadastro, setShowModalCadastro] = useState(false);
 
 
   const navigate = useNavigate();
@@ -216,10 +216,13 @@ export default function ListaLocais() {
         <div className="row mb-4">
           <div className="col-12 d-flex justify-content-beteween">
             <button
-              className="btn btn-outline-light ms-auto" disabled={loading}
+              className="btn btn-outline-light ms-auto d-none"
+              onClick={() => setShowModalCadastro(true)}
+              disabled={loading}
             >
               <MdAddLocationAlt size={30} />
             </button>
+
           </div>
           <div className="col-12">
 
@@ -279,7 +282,7 @@ export default function ListaLocais() {
                         <Dropdown.Item onClick={() => handleShow(local.id)}>
                           <FaEye className="me-2" /> Visualizar
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleEditar(local.id)}>
+                        <Dropdown.Item onClick={() => handleEditar(local.id)} className='d-none'>
                           <FaEdit className="me-2" /> Editar
                         </Dropdown.Item>
                         <Dropdown.Item
@@ -299,6 +302,24 @@ export default function ListaLocais() {
 
         {totalPages > 1 && renderPagination()}
       </div>
+      <Modal show={showModalCadastro} scrollable onHide={() => setShowModalCadastro(false)} size='xl' centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Cadastrar Local</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormCadastroLocal
+            onClose={() => setShowModalCadastro(false)}
+            onSuccess={() => {
+              // Recarrega a lista após cadastrar
+              window.location.reload();
+            }}
+          />
+        </Modal.Body>
+
+        <Modal.Footer className='py-1'>
+           <img src={logotipo} alt="Logo" width={220}  className='mx-auto d-block' />
+        </Modal.Footer>
+      </Modal>
 
       {/* Modal de Visualização */}
       <Modal show={show} onHide={() => setShow(false)} size='xl' scrollable>

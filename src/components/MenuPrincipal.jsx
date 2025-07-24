@@ -1,29 +1,29 @@
-// components/Layout/LayoutAdmin.jsx
+// ✅ LayoutAdmin.jsx 100% corrigido
 
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
-  FaHome,
-  FaUsers,
-  FaBullhorn,
-  FaBars,
-  FaChevronLeft,
-  FaChevronRight,
-  FaRegUserCircle,
+  FaHome, FaUsers, FaBullhorn, FaBars, FaChevronLeft, FaChevronRight, FaRegUserCircle
 } from 'react-icons/fa';
 import { BiCompass } from 'react-icons/bi';
-import { CiLogout } from "react-icons/ci";
+import { CiLogout, CiWarning } from "react-icons/ci";
+import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import logotipo from '../assets/logotipo.png';
 import Copyright from './CopyRigth';
-import { CiWarning } from "react-icons/ci";
-import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import axios from 'axios';
 
 export default function MenuPrincipal({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [showModal, setShowModal] = useState(false);
-  const [perfil, setPerfil] = useState(null);
+  const [dados, setDados] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(null);
+  
+  
+  console.log(carregando, erro);
+  const { email} = useParams();
+ // Obtém o ID do blog a partir da URL
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,39 +32,29 @@ export default function MenuPrincipal({ children }) {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => isMobile && setIsMenuOpen(false);
 
-  // ✅ Captura email da query string
-  const queryParams = new URLSearchParams(location.search);
-  const email = queryParams.get('email');
 
-  // Responsividade
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
       setIsMenuOpen(!mobile);
     };
-
     window.addEventListener('resize', handleResize);
     handleResize();
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // ✅ Buscar perfil com email dinâmico via query param
   useEffect(() => {
     if (email) {
-      console.log("📌 Email capturado:", email);
-
-      axios.get(`http://localhost:8080/api/utilizadores/perfil?email=${encodeURIComponent(email)}`)
-        .then(response => {
-          console.log('✅ Perfil carregado:', response.data);
-          setPerfil(response.data);
+      axios.get(`http://localhost:8080/api/utilizadores/perfil/${email}`)
+        .then(res => {
+          setDados(res.data);
+          setCarregando(false);
         })
-        .catch(err => {
-          console.error('❌ Erro ao buscar perfil:', err);
+        .catch(() => {
+          setErro('Erro ao carregar os dados do perfil');
+          setCarregando(false);
         });
-    } else {
-      console.warn("⚠️ Nenhum email na query string.");
     }
   }, [email]);
 
@@ -79,7 +69,7 @@ export default function MenuPrincipal({ children }) {
   };
 
   const redirectToPerfil = () => {
-    navigate("/pageEditPerfil"); // Ajuste a rota do editar perfil
+    navigate("/pageEditPerfil" + `?email=${encodeURIComponent(email)}`);
   };
 
   const handleLogout = () => {
@@ -90,7 +80,7 @@ export default function MenuPrincipal({ children }) {
   };
 
   const menuItems = [
-    { id: 'painel', icon: <FaHome />, label: 'Painel', path: '/homeAdmin' },
+    { id: 'painel', icon: <FaHome />, label: 'Painel', path: `/homeAdmin/${email}` },
     { id: 'Utilizadores', icon: <FaUsers />, label: 'Utilizadores', path: '/pageTecnicos' },
     { id: 'Anuncios', icon: <FaBullhorn />, label: 'Anuncios', path: '/pageAnuncios' },
     { id: 'Locais', icon: <BiCompass />, label: 'Locais', path: '/pageLocais' },
@@ -121,14 +111,13 @@ export default function MenuPrincipal({ children }) {
               )}
             </div>
 
-            {/* ✅ Perfil dinâmico */}
             <div title='Perfil' onClick={redirectToPerfil} className="profile-section text-center py-3">
               <FaRegUserCircle fontSize={50} />
 
-              {isMenuOpen && perfil && (
+              {isMenuOpen && dados && (
                 <>
-                  <div className="fw-bold">{perfil.nomeUsuario}</div>
-                  <div className="small text-white">{perfil.tipo}</div>
+                  <div className="fw-bold mt-1">{dados.nomeUsuario}</div>
+                  <div className="small text-white">{dados.tipo}</div>
                 </>
               )}
             </div>
@@ -137,7 +126,6 @@ export default function MenuPrincipal({ children }) {
               <ul>
                 {menuItems.map((item) => {
                   const isActive = item.path === currentPath;
-
                   return (
                     <li key={item.id}>
                       {item.id === 'Sair' ? (
@@ -204,16 +192,14 @@ export default function MenuPrincipal({ children }) {
                   className="btn btn-outline-secondary d-flex align-items-center gap-2"
                   onClick={() => setShowModal(false)}
                 >
-                  <FaTimes />
-                  Cancelar
+                  <FaTimes /> Cancelar
                 </button>
                 <button
                   type="button"
                   className="btn btn-danger d-flex align-items-center gap-2"
                   onClick={handleLogout}
                 >
-                  <FaSignOutAlt />
-                  Sair Agora
+                  <FaSignOutAlt /> Sair Agora
                 </button>
               </div>
             </div>

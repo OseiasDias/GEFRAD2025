@@ -6,7 +6,7 @@ import Calendar from '../../components/componentesHomeAdmin/Calendario.jsx';
 export default function HomeOficinaAdmin() {
   return (
     <>
-      < MenuPrincipal >
+      <MenuPrincipal nomeUsuario="Administrador" tipo="Admin">
         <EntidadesPrincipal />
         <GraficoUsuabilidade />
         <Calendar />

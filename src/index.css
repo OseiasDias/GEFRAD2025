@@ -1,0 +1,16 @@
+
+.redirecionarIcone {
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin-bottom: -20px !important;
+}
+
+.redirecionarIcone :hover {
+  color: #ffcc00; /* Cor amarela ao passar o mouse */
+}
+
+.bgGeneral {
+  background-color: #212529; /* Cor de fundo geral */
+  border-radius: 8px; /* Bordas arredondadas */
+}

@@ -2,14 +2,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Modal, Spinner } from 'react-bootstrap';
-
 // Ícones
 import {
-  FaSearch,  FaTrash, FaUser, FaPhone, FaEye, FaEllipsisV,
+  FaSearch, FaTrash, FaUser, FaPhone, FaEye, FaEllipsisV,
   FaUserShield, FaUserTie, FaCheckCircle, FaBan, FaHourglassHalf, FaEnvelope,
- FaChevronLeft, FaChevronRight,
+  FaChevronLeft, FaChevronRight,
 } from 'react-icons/fa';
-
 
 // Bootstrap
 import { Card, Col, Dropdown, Row } from 'react-bootstrap';
@@ -20,7 +18,7 @@ import logotipo from '../assets/logotipo.png';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoMdPersonAdd } from 'react-icons/io';
-
+import GraficoUtilizador from './GraficoUtilizador.jsx';
 const API_URL = import.meta.env.VITE_API_URL;
 
 
@@ -320,22 +318,27 @@ export default function ListaUtilizadores() {
     <>
       <div className="funcionarios-page container-fluid p-4">
         {/* Adicione este botão no cabeçalho (ajuste conforme seu layout) */}
-        <div className="row mb-4 ">
-          <div className="col-12 d-flex justify-content-between align-items-center">
+        <div className="row">
+          <h4 className="text-white mb-4">Gráfico de Crescimento de Utilizadores</h4>
 
-            <button
-              className="btn btn-outline-light ms-auto"
-              onClick={() => setShowAddAdminModal(true)}
-              disabled={loading}
-            >
-             <IoMdPersonAdd fontSize={30} />
-
-            </button>
-          </div>
+          <GraficoUtilizador />
         </div>
+
+
         <div className="row mb-4">
           <div className="col-12">
-            <h3 className="text-white mb-4">Lista de Utilizadores</h3>
+
+            <div className="d-flex justify-content-between mt-5">
+
+              <h4 className="text-white mb-4">Lista de Utilizadores</h4>
+
+              <div className="d-block p-0">
+                <IoMdPersonAdd fontSize={30}
+                  disabled={loading} onClick={() => setShowAddAdminModal(true)} className='redirecionarIcone'/>
+
+              </div>
+
+            </div>
             <div className="search-box">
               <div className="input-group">
                 <span className="input-group-text"><FaSearch /></span>
@@ -353,8 +356,8 @@ export default function ListaUtilizadores() {
 
         </div>
 
-        <div className="table-responsive">
-          <table className="table table-dark table-hover">
+        <div className="table-responsive ">
+          <table className="table table-dark table-hover bgGeneral" >
             <thead>
               <tr>
                 <th>#</th>
@@ -408,7 +411,7 @@ export default function ListaUtilizadores() {
                         <Dropdown.Item onClick={() => handleShow(utilizador.email)}>
                           <FaEye className="me-2" /> Visualizar
                         </Dropdown.Item>
-                        
+
 
                         <Dropdown.Item
                           className="text-danger"

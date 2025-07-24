@@ -22,7 +22,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //import logotipo from "../../assets/logotipo.png";
 import '../css/StylesFuncionario/homeOficinaAdmin.css';
-
+import GraficoAnuncios from "./componentesHomeAdmin/GraficoAnuncios.jsx";
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -135,7 +135,7 @@ export default function ListaAnuncios() {
     };
 
     return (
-        <div className="container mt-4">
+        <div className="container-fluid mt-4">
             <ToastContainer
                 position="top-center"
                 autoClose={3000}
@@ -147,10 +147,11 @@ export default function ListaAnuncios() {
                 draggable
                 pauseOnHover
             />
-            <h3 className="text-white mb-3">Lista de Anúncios</h3>
+           <div className="row"> <GraficoAnuncios /></div>
+            <h4 className="text-white mb-3 mt-5">Lista de Anúncios</h4>
 
-            <div className="mb-3">
-                <div className="input-group">
+            <div className="mb-3 ">
+                <div className="input-group ">
                     <span className="input-group-text"><FaSearch /></span>
                     <input
                         type="text"
@@ -176,7 +177,7 @@ export default function ListaAnuncios() {
             ) : (
 
                 <>
-                    <Row className="g-4">
+                    <Row className="g-4  bgGeneral pb-4 mt-3">
                         {currentAnuncios.map((anuncio) => (
                             <Col key={anuncio.id} md={6} lg={4}>
                                 <Card className="shadow h-100">
