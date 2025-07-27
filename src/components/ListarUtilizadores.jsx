@@ -8,14 +8,15 @@ import {
   FaUserShield, FaUserTie, FaCheckCircle, FaBan, FaHourglassHalf, FaEnvelope,
   FaChevronLeft, FaChevronRight,
 } from 'react-icons/fa';
-
+import { FaUserPlus, FaLock } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // Bootstrap
 import { Card, Col, Dropdown, Row } from 'react-bootstrap';
 
 // Estilos e assets
 import '../css/StylesFuncionario/homeOficinaAdmin.css';
 import logotipo from '../assets/logotipo.png';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoMdPersonAdd } from 'react-icons/io';
 const API_URL = import.meta.env.VITE_API_URL;
@@ -36,7 +37,7 @@ export default function ListaUtilizadores() {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [utilizadorParaDeletar, setUtilizadorParaDeletar] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
 
   // Adicione esses novos estados
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
@@ -213,11 +214,13 @@ export default function ListaUtilizadores() {
   const filteredUtilizadores = utilizadores.filter(utilizador => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      utilizador.nomeUsuario.toLowerCase().includes(searchLower) ||
-      (utilizador.email && utilizador.email.toLowerCase().includes(searchLower)) ||
-      (utilizador.perfis && utilizador.perfis.some(perfil =>
-        perfil.valor && perfil.valor.toLowerCase().includes(searchLower)
-      ))
+      utilizador.tipo === 'CLIENTE' && (
+        utilizador.nomeUsuario.toLowerCase().includes(searchLower) ||
+        (utilizador.email && utilizador.email.toLowerCase().includes(searchLower)) ||
+        (utilizador.perfis && utilizador.perfis.some(perfil =>
+          perfil.valor && perfil.valor.toLowerCase().includes(searchLower)
+        ))
+      )
     );
   });
   useEffect(() => {
@@ -255,7 +258,6 @@ export default function ListaUtilizadores() {
 
     return (
       <div className="pagination-container paginaLimt ">
-        <ToastContainer position="top-center" autoClose={3000} />
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
@@ -316,7 +318,7 @@ export default function ListaUtilizadores() {
   return (
     <>
       <div className="funcionarios-page mt-5 container-fluid p-4 bordarDIV">
-  
+
 
         <div className="row mb-4 ">
           <div className="col-12">
@@ -327,7 +329,7 @@ export default function ListaUtilizadores() {
 
               <div className="d-block p-0">
                 <IoMdPersonAdd fontSize={30}
-                  disabled={loading} onClick={() => setShowAddAdminModal(true)} className='redirecionarIcone'/>
+                  disabled={loading} onClick={() => setShowAddAdminModal(true)} className='redirecionarIcone' />
 
               </div>
 
@@ -425,6 +427,7 @@ export default function ListaUtilizadores() {
         {totalPages > 1 && renderPagination()}
       </div>
 
+
       <Modal
         show={showAddAdminModal}
         onHide={() => {
@@ -435,15 +438,21 @@ export default function ListaUtilizadores() {
         centered
         scrollable
       >
-        <Modal.Header closeButton className="bg-primary text-white">
-          <Modal.Title>Adicionar Novo Administrador</Modal.Title>
+        <Modal.Header closeButton className="bg-success text-white">
+          <Modal.Title>
+            <FaUserPlus className="me-2" /> Adicionar Novo Administrador
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+
+        <Modal.Body className="bg-light">
           <Form>
             <div className="row">
               <div className="col-lg-6 mb-3">
                 <Form.Group>
-                  <Form.Label>Nome Completo *</Form.Label>
+                  <Form.Label>
+                    <FaUserPlus className="me-1 text-primary" />
+                    Nome Completo *
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     name="nomeUsuario"
@@ -451,6 +460,7 @@ export default function ListaUtilizadores() {
                     value={newAdmin.nomeUsuario}
                     onChange={handleAdminInputChange}
                     isInvalid={!!formErrors.nomeUsuario}
+                    required
                   />
                   <Form.Control.Feedback type="invalid">
                     {formErrors.nomeUsuario}
@@ -460,7 +470,10 @@ export default function ListaUtilizadores() {
 
               <div className="col-lg-6 mb-3">
                 <Form.Group>
-                  <Form.Label>Email *</Form.Label>
+                  <Form.Label>
+                    <FaEnvelope className="me-1 text-primary" />
+                    Email *
+                  </Form.Label>
                   <Form.Control
                     type="email"
                     name="email"
@@ -468,6 +481,7 @@ export default function ListaUtilizadores() {
                     value={newAdmin.email}
                     onChange={handleAdminInputChange}
                     isInvalid={!!formErrors.email}
+                    required
                   />
                   <Form.Control.Feedback type="invalid">
                     {formErrors.email}
@@ -477,7 +491,10 @@ export default function ListaUtilizadores() {
 
               <div className="col-lg-6 mb-3">
                 <Form.Group>
-                  <Form.Label>Senha *</Form.Label>
+                  <Form.Label>
+                    <FaLock className="me-1 text-primary" />
+                    Senha *
+                  </Form.Label>
                   <Form.Control
                     type="password"
                     name="palavraPasse"
@@ -485,6 +502,7 @@ export default function ListaUtilizadores() {
                     value={newAdmin.palavraPasse}
                     onChange={handleAdminInputChange}
                     isInvalid={!!formErrors.palavraPasse}
+                    required
                   />
                   <Form.Control.Feedback type="invalid">
                     {formErrors.palavraPasse}
@@ -494,7 +512,10 @@ export default function ListaUtilizadores() {
 
               <div className="col-lg-6 mb-3">
                 <Form.Group>
-                  <Form.Label>Telefone *</Form.Label>
+                  <Form.Label>
+                    <FaPhone className="me-1 text-primary" />
+                    Telefone *
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     name="telefone"
@@ -502,6 +523,7 @@ export default function ListaUtilizadores() {
                     value={newAdmin.telefone}
                     onChange={handleAdminInputChange}
                     isInvalid={!!formErrors.telefone}
+                    required
                   />
                   <Form.Control.Feedback type="invalid">
                     {formErrors.telefone}
@@ -510,38 +532,58 @@ export default function ListaUtilizadores() {
               </div>
             </div>
           </Form>
+          <div className="footerModal bg-danger">
+
+            <button
+              className="btn btn-success float-end ms-2"
+              onClick={async () => {
+                try {
+                  await handleAddAdmin();
+                  // toast.success("Administrador cadastrado com sucesso!", {
+                  //   position: "top-right",
+                  //   autoClose: 3000,
+                  // });
+                  // eslint-disable-next-line no-unused-vars
+                } catch (err) {
+                  toast.error("Erro ao cadastrar administrador!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                  });
+                }
+              }}
+              disabled={isAddingAdmin}
+            >
+              {isAddingAdmin ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />{" "}
+                  Salvando...
+                </>
+              ) : (
+                "Salvar"
+              )}
+            </button>
+            <button
+              className="btn btn-outline-secondary float-end"
+              onClick={() => {
+                setShowAddAdminModal(false);
+                resetAdminForm();
+              }}
+              disabled={isAddingAdmin}
+            >
+              Cancelar
+            </button>
+
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <button
-            className="btn btn-secondary"
-            onClick={() => {
-              setShowAddAdminModal(false);
-              resetAdminForm();
-            }}
-            disabled={isAddingAdmin}
-          >
-            Cancelar
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={handleAddAdmin}
-            disabled={isAddingAdmin}
-          >
-            {isAddingAdmin ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />{" "}
-                Salvando...
-              </>
-            ) : (
-              "Salvar"
-            )}
-          </button>
+
+        <Modal.Footer className="bg-light">
+          <img src={logotipo} alt="..." width={220} className='d-block mx-auto' />
         </Modal.Footer>
       </Modal>
 
@@ -662,7 +704,7 @@ export default function ListaUtilizadores() {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showConfirmDelete} onHide={() => setShowConfirmDelete(false)}>
+      <Modal show={showConfirmDelete} onHide={() => setShowConfirmDelete(false)} >
         <Modal.Header closeButton className="bg-danger text-white">
           <Modal.Title>Confirmar Remoção</Modal.Title>
         </Modal.Header>

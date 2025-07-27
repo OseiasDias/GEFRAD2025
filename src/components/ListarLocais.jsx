@@ -212,8 +212,8 @@ export default function ListaLocais() {
 
   return (
     <>
-      <div className="funcionarios-page container-fluid p-4">
-        <div className="row mb-4">
+      <div className="funcionarios-page  bordarDIV container-fluid p-4">
+        <div className="row mb-4 ">
           <div className="col-12 d-flex justify-content-beteween">
             <button
               className="btn btn-outline-light ms-auto d-none"
@@ -224,7 +224,7 @@ export default function ListaLocais() {
             </button>
 
           </div>
-          <div className="col-12">
+          <div className="col-12 ">
 
             <h3 className="text-white mb-4">Lista de Locais</h3>
             <div className="search-box">
@@ -323,7 +323,7 @@ export default function ListaLocais() {
 
       {/* Modal de Visualização */}
       <Modal show={show} onHide={() => setShow(false)} size='xl' scrollable>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton >
           <Modal.Title>Detalhes do Local</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -425,9 +425,9 @@ export default function ListaLocais() {
             </div>
           ) : null}
         </Modal.Body>
-        <Modal.Footer className='py-0 d-flex justify-content-between'>
-          <div></div>
-          <button className='btn btn-primary px-3' onClick={() => handleEditar(idLocal)}>
+        <Modal.Footer className='py-1 d-flex justify-content-between'>
+          <img src={logotipo} alt="..." width={220} className='mx-auto d-block' />
+          <button className='btn d-none btn-primary px-3' onClick={() => handleEditar(idLocal)}>
             Editar <FiEdit fontSize={13} />
           </button>
         </Modal.Footer>

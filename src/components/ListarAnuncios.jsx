@@ -14,6 +14,8 @@ import {
     
   
 } from 'react-icons/fa';
+import logotipo from '../assets/logotipo.png';
+
 import { MdLocationOn } from 'react-icons/md';
 import { Card, Row, Col, Spinner, Button, Modal } from 'react-bootstrap';
 import { BiCompass } from 'react-icons/bi';
@@ -94,41 +96,47 @@ export default function ListaAnuncios() {
     };
    
 
-    const handleDeleteConfirm = async () => {
-        setIsDeleting(true);
-        try {
-            await axios.delete(`${API_URL}/anuncios/${anuncioToDelete.id}`);
-            
-            // Atualiza o estado local sem recarregar a página
-            setAnuncios(prevAnuncios => prevAnuncios.filter(a => a.id !== anuncioToDelete.id));
-            
-            toast.success('Anúncio excluído com sucesso!', {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-            
-            // Resetar a página para a primeira se necessário
-            if (currentAnuncios.length === 1 && currentPage > 1) {
-                setCurrentPage(currentPage - 1);
-            }
-            
-        } catch (error) {
-            console.error("Erro ao excluir anúncio:", error);
-            toast.error('Erro ao excluir anúncio', {
-                position: "top-center",
-                autoClose: 3000
-            });
-        } finally {
-            setIsDeleting(false);
-            setShowDeleteModal(false);
-            setAnuncioToDelete(null);
-        }
-    };
+const handleDeleteConfirm = async () => {
+  if (!anuncioToDelete) return;
+  setIsDeleting(true);
+
+  try {
+    // Fecha a modal primeiro
+    setShowDeleteModal(false);
+
+    // Pequeno delay para evitar conflito no React com a desmontagem
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    // Requisição de exclusão
+    await axios.delete(`${API_URL}/anuncios/${anuncioToDelete.id}`);
+
+    // Atualiza a lista localmente
+    setAnuncios((prev) => prev.filter((a) => a.id !== anuncioToDelete.id));
+
+    // Feedback visual
+    toast.success("Anúncio excluído com sucesso!", {
+      position: "top-center",
+      autoClose: 3000,
+    });
+
+    // Ajusta a página se necessário
+    if (currentAnuncios.length === 1 && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
+
+  } catch (error) {
+    console.error("Erro ao excluir anúncio:", error);
+    toast.error("Erro ao excluir anúncio", {
+      position: "top-center",
+      autoClose: 3000,
+    });
+  } finally {
+    setIsDeleting(false);
+    setAnuncioToDelete(null);
+  }
+};
+
     const handleDeleteCancel = () => {
         setShowDeleteModal(false);
         setAnuncioToDelete(null);
@@ -264,10 +272,33 @@ export default function ListaAnuncios() {
             )}
            </div>
 
+              {/* Modal de confirmação de exclusão */}
+            <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmar Exclusão</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Tem certeza que deseja excluir este anúncio?</p>
+                    {anuncioToDelete && (
+                        <>
+                            <strong>Mensagem:</strong> {anuncioToDelete.mensagem}<br />
+                            <strong>Local:</strong> {anuncioToDelete.nomeLocal}<br />
+                            <strong>Criador:</strong> {anuncioToDelete.criador}
+                        </>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleDeleteCancel}>Cancelar</Button>
+                    <Button variant="danger" onClick={handleDeleteConfirm} disabled={isDeleting}>
+                        {isDeleting ? 'Excluindo...' : 'Excluir'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
             {/* Modal de visualização */}
             <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
-                <Modal.Header closeButton className="bg-light">
-                    <Modal.Title className="text-primary">
+                <Modal.Header closeButton  style={{ backgroundColor: '#e3e3e6ff' }}>
+                    <Modal.Title className="text-black">
                         <FaBullhorn className="me-2" />
                         Detalhes do Anúncio
                     </Modal.Title>
@@ -281,7 +312,7 @@ export default function ListaAnuncios() {
                                 {modalContent.mensagem || 'Sem título'}
                             </h4>
 
-                            <Card className="mb-3 shadow-sm border-0">
+                            <Card className="mb-3 shadow-sm border-0 " style={{ backgroundColor: '#e3e3e6ff' }}> 
                                 <Card.Body>
                                     <Row className="mb-3">
                                         <Col md={6} className="mb-2">
@@ -326,37 +357,17 @@ export default function ListaAnuncios() {
                             <p className="mt-2">Carregando detalhes...</p>
                         </div>
                     )}
+                        <Button variant="outline-danger" className='mt-2 float-end' onClick={handleCloseModal}>
+                       <b> Fechar</b>
+                    </Button>
                 </Modal.Body>
 
                 <Modal.Footer className="bg-light">
-                    <Button variant="outline-danger" onClick={handleCloseModal}>
-                       <b> Fechar</b>
-                    </Button>
+                <img src={logotipo} alt="..." width={220} className='mx-auto d-block' />
                 </Modal.Footer>
             </Modal>
 
-            {/* Modal de confirmação de exclusão */}
-            <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirmar Exclusão</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Tem certeza que deseja excluir este anúncio?</p>
-                    {anuncioToDelete && (
-                        <>
-                            <strong>Mensagem:</strong> {anuncioToDelete.mensagem}<br />
-                            <strong>Local:</strong> {anuncioToDelete.nomeLocal}<br />
-                            <strong>Criador:</strong> {anuncioToDelete.criador}
-                        </>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleDeleteCancel}>Cancelar</Button>
-                    <Button variant="danger" onClick={handleDeleteConfirm} disabled={isDeleting}>
-                        {isDeleting ? 'Excluindo...' : 'Excluir'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+         
         </div>
     );
 }
