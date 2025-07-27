@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { GrUpdate } from "react-icons/gr";
 import { Button } from 'react-bootstrap';
+import { FaMoneyBillWave, FaTimesCircle, FaSave, FaCoins } from "react-icons/fa";
 
 import {
   FaSearch, FaTrash, FaUser, FaPhone, FaEye, FaEllipsisV,
@@ -40,6 +41,7 @@ export default function ListaUtilizadores() {
   const [utilizadorParaDeletar, setUtilizadorParaDeletar] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const itemsPerPage = 8;
+  //const [utilizadorSelecionado, setUtilizadorSelecionado] = useState(null);
 
   // Adicione esses novos estados
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
@@ -50,6 +52,8 @@ export default function ListaUtilizadores() {
     telefone: '',
     tipo: 'ADMIN'
   });
+
+
   const [formErrors, setFormErrors] = useState({});
   const [isAddingAdmin, setIsAddingAdmin] = useState(false);
 
@@ -119,29 +123,32 @@ export default function ListaUtilizadores() {
   };
 
 
-const atualizarSaldo = async () => {
-  try {
-    const response = await fetch(`http://localhost:8080/api/utilizadores/${emailSelecionado}/saldo`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ saldo: parseFloat(saldo) })
-    });
+  const atualizarSaldo = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/utilizadores/${emailSelecionado}/saldo`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ saldo: parseFloat(saldo) })
+      });
 
-    if (!response.ok) {
-      throw new Error("Erro ao atualizar o saldo");
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar o saldo");
+      }
+
+
+      const data = await response.json();
+      console.log(data);
+      toast.success("Saldo atualizado com sucesso!");
+      setShowModal(false);
+            setSaldo("");         // Limpa o input
+
+    } catch (error) {
+      console.error("Erro ao fazer fetch:", error);
+      toast.error("Erro ao atualizar o saldo.");
     }
-
-    const data = await response.json();
-    console.log(data);
-    toast.success("Saldo atualizado com sucesso!");
-    setShowModal(false);
-  } catch (error) {
-    console.error("Erro ao fazer fetch:", error);
-    toast.error("Erro ao atualizar o saldo.");
-  }
-};
+  };
 
 
   const resetAdminForm = () => {
@@ -386,17 +393,16 @@ const atualizarSaldo = async () => {
 
 
         </div>
-
         <div className="table-responsive ">
-          <table className="table table-dark table-hover bgGeneral" >
+          <table className="table table-dark table-hover bgGeneral">
             <thead>
               <tr>
                 <th>#</th>
                 <th><FaUser className="me-1" /> Nome</th>
                 <th><FaEnvelope className="me-1" /> Email</th>
                 <th><FaUserShield className="me-1" /> Tipo</th>
+                <th><FaMoneyBillWave className="me-1" /> Saldo</th> {/* NOVA COLUNA */}
                 <th><GrUpdate className="me-1" /> Atualizar Saldo</th>
-
                 <th><FaCheckCircle className="me-1" /> Estado</th>
                 <th><FaEllipsisV className="me-1" /> Ações</th>
               </tr>
@@ -420,11 +426,18 @@ const atualizarSaldo = async () => {
                     </span>
                   </td>
                   <td>
-                    <button className='btn btn-outline-primary' onClick={() => abrirModalSaldo(utilizador.email)}>
+                    <span className="badge bg-info text-dark">
+                      {Number(utilizador.saldo).toLocaleString()}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className='btn btn-outline-primary'
+                      onClick={() => abrirModalSaldo(utilizador.email)}
+                    >
                       <MdOutlineSecurityUpdate size={20} /> Atualizar Saldo
                     </button>
                   </td>
-
                   <td>
                     <span className={`badge d-flex align-items-center gap-1 ${utilizador.estado === 'ATIVO' ? 'bg-success' :
                       utilizador.estado === 'BLOQUEADO' ? 'bg-danger' :
@@ -446,8 +459,6 @@ const atualizarSaldo = async () => {
                         <Dropdown.Item onClick={() => handleShow(utilizador.email)}>
                           <FaEye className="me-2" /> Visualizar
                         </Dropdown.Item>
-
-
                         <Dropdown.Item
                           className="text-danger"
                           onClick={() => confirmarRemocao(utilizador)}
@@ -460,33 +471,43 @@ const atualizarSaldo = async () => {
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
+
 
         {totalPages > 1 && renderPagination()}
       </div>
       <Modal show={showModal} onHide={() => setShowModal(false)} centered backdrop="static">
-        <Modal.Header closeButton className="bg-dark text-white">
-          <Modal.Title>Atualizar Saldo</Modal.Title>
+        <Modal.Header closeButton className="bg-white text-dark border-bottom">
+          <Modal.Title>
+            <FaMoneyBillWave className="me-2 text-success" />
+            Atualizar Saldo
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bg-dark text-white">
+
+        <Modal.Body className="bg-white text-dark">
           <Form.Group>
-            <Form.Label>Novo Saldo</Form.Label>
+            <Form.Label>
+              <FaMoneyBillWave className="me-2 text-dark" />
+              Novo Saldo
+            </Form.Label>
             <Form.Control
               type="number"
+              min={10}
+              className="bg-light text-dark"
               value={saldo}
               onChange={(e) => setSaldo(e.target.value)}
               placeholder="Digite o novo saldo"
             />
           </Form.Group>
         </Modal.Body>
-        <Modal.Footer className="bg-dark text-white">
+
+        <Modal.Footer className="bg-white border-top">
           <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancelar
+            <FaTimesCircle className="me-1" /> Cancelar
           </Button>
           <Button variant="primary" onClick={atualizarSaldo}>
-            Atualizar
+            <MdOutlineSecurityUpdate size={20} /> Confirmar Atualização
           </Button>
         </Modal.Footer>
       </Modal>
