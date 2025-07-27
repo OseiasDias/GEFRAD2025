@@ -41,19 +41,22 @@ export default function ListaAnuncios() {
     const [currentPage, setCurrentPage] = useState(1);
     const anunciosPerPage = 9;
 
-    useEffect(() => {
-        const fetchAnuncios = async () => {
-            try {
-                const response = await axios.get(`${API_URL}/anuncios/ListarAnuncios`);
-                setAnuncios(response.data);
-            } catch (error) {
-                console.error("Erro ao buscar anúncios:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchAnuncios();
-    }, []);
+ useEffect(() => {
+    const fetchAnuncios = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/anuncios/ListarAnuncios`);
+            // Ordena do mais novo para o mais antigo (id maior primeiro)
+            const anunciosOrdenados = response.data.sort((a, b) => b.id - a.id);
+            setAnuncios(anunciosOrdenados);
+        } catch (error) {
+            console.error("Erro ao buscar anúncios:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchAnuncios();
+}, []);
+
 
     const filteredAnuncios = anuncios.filter((anuncio) => {
         const search = searchTerm.toLowerCase();

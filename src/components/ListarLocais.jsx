@@ -52,21 +52,24 @@ export default function ListaLocais() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchLocais = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${API_URL}/locais/ListarLocais`);
-        setLocais(response.data);
-      } catch (err) {
-        console.error('Erro ao buscar locais:', err);
-        setError('Erro ao carregar dados dos locais');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLocais();
-  }, []);
+ useEffect(() => {
+  const fetchLocais = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/locais/ListarLocais`);
+      // 🔽 Ordena os locais pela ordem decrescente de ID
+      const locaisOrdenados = response.data.sort((a, b) => b.id - a.id);
+      setLocais(locaisOrdenados);
+    } catch (err) {
+      console.error('Erro ao buscar locais:', err);
+      setError('Erro ao carregar dados dos locais');
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchLocais();
+}, []);
+
 
   useEffect(() => {
     if (!show || !idLocal) return;

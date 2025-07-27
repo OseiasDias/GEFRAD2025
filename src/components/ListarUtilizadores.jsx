@@ -135,22 +135,24 @@ export default function ListaUtilizadores() {
 
   // No seu return, adicione o botão e o modal:
 
+useEffect(() => {
+  const fetchUtilizadores = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/utilizadores`);
 
-  useEffect(() => {
-    const fetchUtilizadores = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${API_URL}/utilizadores`);
-        setUtilizadores(response.data);
-      } catch (err) {
-        console.error('Erro ao buscar utilizadores:', err);
-        setError('Erro ao carregar dados dos utilizadores');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUtilizadores();
-  }, []);
+      // 🔽 Ordena por ID decrescente (últimos primeiro)
+      setUtilizadores(response.data.sort((a, b) => b.id - a.id));
+    } catch (err) {
+      console.error('Erro ao buscar utilizadores:', err);
+      setError('Erro ao carregar dados dos utilizadores');
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchUtilizadores();
+}, []);
+
 
   useEffect(() => {
     if (!show || !idUtilizador) return;
