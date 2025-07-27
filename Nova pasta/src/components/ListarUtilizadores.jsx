@@ -2,9 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Modal, Spinner } from 'react-bootstrap';
-import { GrUpdate } from "react-icons/gr";
-import { Button } from 'react-bootstrap';
-
+// Ícones
 import {
   FaSearch, FaTrash, FaUser, FaPhone, FaEye, FaEllipsisV,
   FaUserShield, FaUserTie, FaCheckCircle, FaBan, FaHourglassHalf, FaEnvelope,
@@ -15,7 +13,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // Bootstrap
 import { Card, Col, Dropdown, Row } from 'react-bootstrap';
-import { MdOutlineSecurityUpdate } from "react-icons/md";
+
 // Estilos e assets
 import '../css/StylesFuncionario/homeOficinaAdmin.css';
 import logotipo from '../assets/logotipo.png';
@@ -53,11 +51,6 @@ export default function ListaUtilizadores() {
   const [formErrors, setFormErrors] = useState({});
   const [isAddingAdmin, setIsAddingAdmin] = useState(false);
 
-  const [showModal, setShowModal] = useState(false);
-  const [saldo, setSaldo] = useState('');
-  const [emailSelecionado, setEmailSelecionado] = useState('');
-
-  console.log(emailSelecionado);
   // Função para adicionar administrador
   const handleAddAdmin = async () => {
     // Validação
@@ -113,37 +106,6 @@ export default function ListaUtilizadores() {
     }
   };
 
-  const abrirModalSaldo = (email) => {
-    setEmailSelecionado(email);
-    setShowModal(true);
-  };
-
-
-const atualizarSaldo = async () => {
-  try {
-    const response = await fetch(`http://localhost:8080/api/utilizadores/${emailSelecionado}/saldo`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ saldo: parseFloat(saldo) })
-    });
-
-    if (!response.ok) {
-      throw new Error("Erro ao atualizar o saldo");
-    }
-
-    const data = await response.json();
-    console.log(data);
-    toast.success("Saldo atualizado com sucesso!");
-    setShowModal(false);
-  } catch (error) {
-    console.error("Erro ao fazer fetch:", error);
-    toast.error("Erro ao atualizar o saldo.");
-  }
-};
-
-
   const resetAdminForm = () => {
     setNewAdmin({
       nomeUsuario: '',
@@ -173,23 +135,23 @@ const atualizarSaldo = async () => {
 
   // No seu return, adicione o botão e o modal:
 
-  useEffect(() => {
-    const fetchUtilizadores = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${API_URL}/utilizadores`);
+useEffect(() => {
+  const fetchUtilizadores = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/utilizadores`);
 
-        // 🔽 Ordena por ID decrescente (últimos primeiro)
-        setUtilizadores(response.data.sort((a, b) => b.id - a.id));
-      } catch (err) {
-        console.error('Erro ao buscar utilizadores:', err);
-        setError('Erro ao carregar dados dos utilizadores');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUtilizadores();
-  }, []);
+      // 🔽 Ordena por ID decrescente (últimos primeiro)
+      setUtilizadores(response.data.sort((a, b) => b.id - a.id));
+    } catch (err) {
+      console.error('Erro ao buscar utilizadores:', err);
+      setError('Erro ao carregar dados dos utilizadores');
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchUtilizadores();
+}, []);
 
 
   useEffect(() => {
@@ -246,6 +208,10 @@ const atualizarSaldo = async () => {
 
   const mostrarOuNao = (valor) => valor || "Sem informação";
 
+  const getTelefone = (perfis) => {
+    const telefonePerfil = perfis?.find(perfil => perfil.chave === 'telefone');
+    return telefonePerfil ? telefonePerfil.valor : 'Sem informação';
+  };
 
   const filteredUtilizadores = utilizadores.filter(utilizador => {
     const searchLower = searchTerm.toLowerCase();
@@ -395,7 +361,7 @@ const atualizarSaldo = async () => {
                 <th><FaUser className="me-1" /> Nome</th>
                 <th><FaEnvelope className="me-1" /> Email</th>
                 <th><FaUserShield className="me-1" /> Tipo</th>
-                <th><GrUpdate className="me-1" /> Atualizar Saldo</th>
+                <th><FaPhone className="me-1" /> Telefone</th>
 
                 <th><FaCheckCircle className="me-1" /> Estado</th>
                 <th><FaEllipsisV className="me-1" /> Ações</th>
@@ -419,11 +385,7 @@ const atualizarSaldo = async () => {
                       {utilizador.tipo}
                     </span>
                   </td>
-                  <td>
-                    <button className='btn btn-outline-primary' onClick={() => abrirModalSaldo(utilizador.email)}>
-                      <MdOutlineSecurityUpdate size={20} /> Atualizar Saldo
-                    </button>
-                  </td>
+                  <td><FaPhone className="me-2 text-success" />{getTelefone(utilizador.perfis)}</td>
 
                   <td>
                     <span className={`badge d-flex align-items-center gap-1 ${utilizador.estado === 'ATIVO' ? 'bg-success' :
@@ -466,30 +428,6 @@ const atualizarSaldo = async () => {
 
         {totalPages > 1 && renderPagination()}
       </div>
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered backdrop="static">
-        <Modal.Header closeButton className="bg-dark text-white">
-          <Modal.Title>Atualizar Saldo</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="bg-dark text-white">
-          <Form.Group>
-            <Form.Label>Novo Saldo</Form.Label>
-            <Form.Control
-              type="number"
-              value={saldo}
-              onChange={(e) => setSaldo(e.target.value)}
-              placeholder="Digite o novo saldo"
-            />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer className="bg-dark text-white">
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={atualizarSaldo}>
-            Atualizar
-          </Button>
-        </Modal.Footer>
-      </Modal>
 
 
       <Modal

@@ -1,3 +1,4 @@
+// ✅ LayoutAdmin.jsx 100% corrigido
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
@@ -43,29 +44,19 @@ export default function MenuPrincipal({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-useEffect(() => {
-  if (email) {
-    axios.get(`http://localhost:8080/api/utilizadores/perfil/${email}`)
-      .then(res => {
-        setDados(res.data);
-        localStorage.setItem('perfilUsuario', JSON.stringify(res.data)); // <-- aqui
-        setCarregando(false);
-      })
-      .catch(() => {
-        setErro('Erro ao carregar os dados do perfil');
-        setCarregando(false);
-      });
-  }
-}, [email]);
-
-useEffect(() => {
-  const dadosArmazenados = localStorage.getItem('perfilUsuario');
-  if (dadosArmazenados) {
-    setDados(JSON.parse(dadosArmazenados));
-    setCarregando(false);
-  }
-}, []);
-
+  useEffect(() => {
+    if (email) {
+      axios.get(`http://localhost:8080/api/utilizadores/perfil/${email}`)
+        .then(res => {
+          setDados(res.data);
+          setCarregando(false);
+        })
+        .catch(() => {
+          setErro('Erro ao carregar os dados do perfil');
+          setCarregando(false);
+        });
+    }
+  }, [email]);
 
   const handleItemClick = (itemId) => {
     if (itemId === 'Sair') {
@@ -81,14 +72,12 @@ useEffect(() => {
     navigate("/pageEditPerfil" + `?email=${encodeURIComponent(email)}`);
   };
 
- const handleLogout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('idSessao');
-  localStorage.removeItem('perfilUsuario'); // <-- limpar perfil salvo
-  navigate('/');
-  setShowModal(false);
-};
-
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('idSessao');
+    navigate('/');
+    setShowModal(false);
+  };
 
   const menuItems = [
     { id: 'painel', icon: <FaHome />, label: 'Painel', path: `/homeAdmin/${email}` },
