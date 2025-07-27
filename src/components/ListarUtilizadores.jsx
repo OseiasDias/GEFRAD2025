@@ -142,7 +142,7 @@ export default function ListaUtilizadores() {
       console.log(data);
       toast.success("Saldo atualizado com sucesso!");
       setShowModal(false);
-            setSaldo("");         // Limpa o input
+      setSaldo("");         // Limpa o input
 
     } catch (error) {
       console.error("Erro ao fazer fetch:", error);
@@ -370,7 +370,7 @@ export default function ListaUtilizadores() {
 
               <h4 className="text-white mb-4">Lista de Utilizadores</h4>
 
-              <div className="d-block p-0">
+              <div className="d-block p-0 d-none">
                 <IoMdPersonAdd fontSize={30}
                   disabled={loading} onClick={() => setShowAddAdminModal(true)} className='redirecionarIcone' />
 
@@ -595,7 +595,7 @@ export default function ListaUtilizadores() {
                 </Form.Group>
               </div>
 
-              <div className="col-lg-6 mb-3">
+              <div className="col-lg-6 mb-3 opacity-0">
                 <Form.Group>
                   <Form.Label>
                     <FaPhone className="me-1 text-primary" />
@@ -605,7 +605,7 @@ export default function ListaUtilizadores() {
                     type="text"
                     name="telefone"
                     placeholder="Digite o telefone"
-                    value={newAdmin.telefone}
+                    value={938620019}
                     onChange={handleAdminInputChange}
                     isInvalid={!!formErrors.telefone}
                     required
@@ -615,6 +615,7 @@ export default function ListaUtilizadores() {
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
+
             </div>
           </Form>
           <div className="footerModal bg-danger">

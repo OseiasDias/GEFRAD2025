@@ -7,6 +7,8 @@ import { FaUser, FaEnvelope, FaPhone, FaLock } from 'react-icons/fa';
 
 import { toast } from 'react-toastify';
 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -16,6 +18,9 @@ export function EditarAdmin() {
   //const email = params.get("email");
   const { email } = useParams();
   const navigate = useNavigate();
+  const [mostrarSenhaAtual, setMostrarSenhaAtual] = useState(false);
+  const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false);
+  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
   const [newAdmin, setNewAdmin] = useState({
     nomeUsuario: '',
@@ -80,7 +85,7 @@ export function EditarAdmin() {
         errors.email = 'Email inválido.';
       }
 
-   
+
     } else if (tab === 'senha') {
       if (!senhaData.senhaAtual.trim()) {
         errors.senhaAtual = 'Informe sua senha atual.';
@@ -110,12 +115,12 @@ export function EditarAdmin() {
         await axios.patch(`${API_URL}/utilizadores/${email}/editar`, newAdmin);
         toast.success('Dados atualizados com sucesso!');
       } else if (tab === 'senha') {
-        await axios.put(`${API_URL}/utilizadores/perfil/${email}/alterarSenha`, senhaData);
+        await axios.patch(`${API_URL}/utilizadores/perfil/${email}/alterarSenha`, senhaData);
         toast.success('Senha alterada com sucesso!');
       }
 
       navigate('/pageTecnicos');
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error('Erro ao atualizar dados do administrador.');
       setError('Erro ao atualizar dados do administrador.');
@@ -170,7 +175,7 @@ export function EditarAdmin() {
               </Form.Group>
             </div>
 
-         
+
 
             <div className="col-12 mt-3 d-flex justify-content-center">
               <Button variant="outline-light" type="submit" disabled={submitting}>
@@ -184,57 +189,77 @@ export function EditarAdmin() {
       <Tab eventKey="senha" title="Alterar Senha">
         <Form onSubmit={(e) => handleSubmit(e, 'senha')} className="mt-4 shadow-sm p-4 rounded empty">
           <div className="row">
+            {/* SENHA ATUAL */}
             <div className="col-lg-6 mb-3">
               <Form.Group>
                 <Form.Label><FaLock className="me-2" /> Senha Atual *</Form.Label>
                 <InputGroup>
                   <Form.Control
-                    type="password"
+                    type={mostrarSenhaAtual ? "text" : "password"}
                     name="senhaAtual"
                     placeholder="Digite sua senha atual"
                     value={senhaData.senhaAtual}
                     onChange={handleSenhaInputChange}
                     isInvalid={!!formErrors.senhaAtual}
                   />
+                  <Button
+                    variant="success"
+                    onClick={() => setMostrarSenhaAtual(!mostrarSenhaAtual)}
+                  >
+                    {mostrarSenhaAtual ? <FaEyeSlash /> : <FaEye />}
+                  </Button>
                   <Form.Control.Feedback type="invalid">{formErrors.senhaAtual}</Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
             </div>
 
+            {/* NOVA SENHA */}
             <div className="col-lg-6 mb-3">
               <Form.Group>
                 <Form.Label><FaLock className="me-2" /> Nova Senha *</Form.Label>
                 <InputGroup>
                   <Form.Control
-                    type="password"
+                    type={mostrarNovaSenha ? "text" : "password"}
                     name="novaSenha"
                     placeholder="Digite a nova senha"
                     value={senhaData.novaSenha}
                     onChange={handleSenhaInputChange}
                     isInvalid={!!formErrors.novaSenha}
                   />
+                  <Button
+                    variant="success" onClick={() => setMostrarNovaSenha(!mostrarNovaSenha)}
+                  >
+                    {mostrarNovaSenha ? <FaEyeSlash /> : <FaEye />}
+                  </Button>
                   <Form.Control.Feedback type="invalid">{formErrors.novaSenha}</Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
             </div>
 
+            {/* CONFIRMAR NOVA SENHA */}
             <div className="col-lg-6 mb-3">
               <Form.Group>
                 <Form.Label><FaLock className="me-2" /> Confirmar Nova Senha *</Form.Label>
                 <InputGroup>
                   <Form.Control
-                    type="password"
+                    type={mostrarConfirmarSenha ? "text" : "password"}
                     name="confirmarSenha"
                     placeholder="Confirme a nova senha"
                     value={senhaData.confirmarSenha}
                     onChange={handleSenhaInputChange}
                     isInvalid={!!formErrors.confirmarSenha}
                   />
+                  <Button
+                    variant="success" onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                  >
+                    {mostrarConfirmarSenha ? <FaEyeSlash /> : <FaEye />}
+                  </Button>
                   <Form.Control.Feedback type="invalid">{formErrors.confirmarSenha}</Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
             </div>
 
+            {/* BOTÃO SUBMIT */}
             <div className="col-12 mt-3">
               <Button variant="outline-light mx-auto d-block" type="submit" disabled={submitting}>
                 {submitting ? 'Salvando...' : 'Atualizar Senha'}

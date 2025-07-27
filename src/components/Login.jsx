@@ -35,25 +35,25 @@ const AcessoOficina = () => {
         return;
       }
 
-    // Depois de receber a resposta JSON:
-const data = await response.json();
+      // Depois de receber a resposta JSON:
+      const data = await response.json();
 
-console.log("🔍 Dados completos da resposta:", data);
-console.log("🔍 data.user:", data.user);
-console.log("🔍 data.user.tipo:", data.user ? data.user.tipo : "user não definido");
+      console.log("🔍 Dados completos da resposta:", data);
+      console.log("🔍 data.user:", data.user);
+      console.log("🔍 data.user.tipo:", data.user ? data.user.tipo : "user não definido");
 
-if (data.user && data.user.tipo === "Maravilhoso") {
-  // Guarda o token no localStorage (opcional)
-  localStorage.setItem("token", data.token);
+      if (data.user && data.user.tipo === "Maravilhoso") {
+        // Guarda o token no localStorage (opcional)
+        localStorage.setItem("token", data.token);
 
-setTimeout(() => {
-  navigate("/home");
-}, 15000); // 15.000 milissegundos = 15 segundos
+        setTimeout(() => {
+          navigate("/home");
+        }, 15000); // 15.000 milissegundos = 15 segundos
 
-} else {
-  console.log("⚠️ Condição NÃO satisfeita: tipo:", data.user ? data.user.tipo : "sem tipo");
-  alert("Você não tem permissão para acessar esta área.");
-}
+      } else {
+        console.log("⚠️ Condição NÃO satisfeita: tipo:", data.user ? data.user.tipo : "sem tipo");
+        alert("Você não tem permissão para acessar esta área.");
+      }
 
     } catch (error) {
       console.error("Erro no login:", error);

@@ -8,6 +8,8 @@ import HomeAdmin from './page/pageAdmin/HomeAdmin.jsx';
 import UsuariosApp from './page/pageAdmin/Utilizadores.jsx';
 import ListarLocal from './page/pageAdmin/ListarLocais.jsx';
 import Anuncios from './page/pageAdmin/ListarAnuncios.jsx';
+import ListarAdmin from './page/pageAdmin/ListarAdmin.jsx';
+
 import EditarFucionario from './page/pageAdmin/PageEditar/EditarPerfil.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -73,6 +75,17 @@ function App() {
 
             <ProtectedRouteAdministrador>
               <ListarLocal />
+            </ProtectedRouteAdministrador>
+
+
+          } />
+
+            {/**Routes de Add de Entidades */}
+          <Route path="/pageListarAdmin" element={
+
+
+            <ProtectedRouteAdministrador>
+              <ListarAdmin />
             </ProtectedRouteAdministrador>
 
 

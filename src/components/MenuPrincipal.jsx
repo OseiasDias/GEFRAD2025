@@ -10,6 +10,7 @@ import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import logotipo from '../assets/logotipo.png';
 import Copyright from './CopyRigth';
 import axios from 'axios';
+import { RiAdminFill } from "react-icons/ri";
 
 export default function MenuPrincipal({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -94,6 +95,8 @@ export default function MenuPrincipal({ children }) {
   const menuItems = [
     { id: 'painel', icon: <FaHome />, label: 'Painel', path: `/homeAdmin/${email}` },
     { id: 'Utilizadores', icon: <FaUsers />, label: 'Utilizadores', path: '/pageTecnicos' },
+    { id: 'Administradores', icon: <RiAdminFill />, label: 'Administradores', path: '/pageListarAdmin' },
+
     { id: 'Anuncios', icon: <FaBullhorn />, label: 'Anuncios', path: '/pageAnuncios' },
     { id: 'Locais', icon: <BiCompass />, label: 'Locais', path: '/pageLocais' },
     { id: 'Sair', icon: <CiLogout />, label: 'Sair', path: null }
