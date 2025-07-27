@@ -18,11 +18,11 @@ export default function MenuPrincipal({ children }) {
   const [dados, setDados] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
-  
-  
+
+
   console.log(carregando, erro);
-  const { email} = useParams();
- // Obtém o ID do blog a partir da URL
+  const { email } = useParams();
+  // Obtém o ID do blog a partir da URL
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,28 +43,28 @@ export default function MenuPrincipal({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-useEffect(() => {
-  if (email) {
-    axios.get(`http://localhost:8080/api/utilizadores/perfil/${email}`)
-      .then(res => {
-        setDados(res.data);
-        localStorage.setItem('perfilUsuario', JSON.stringify(res.data)); // <-- aqui
-        setCarregando(false);
-      })
-      .catch(() => {
-        setErro('Erro ao carregar os dados do perfil');
-        setCarregando(false);
-      });
-  }
-}, [email]);
+  useEffect(() => {
+    if (email) {
+      axios.get(`http://localhost:8080/api/utilizadores/perfil/${email}`)
+        .then(res => {
+          setDados(res.data);
+          localStorage.setItem('perfilUsuario', JSON.stringify(res.data)); // <-- aqui
+          setCarregando(false);
+        })
+        .catch(() => {
+          setErro('Erro ao carregar os dados do perfil');
+          setCarregando(false);
+        });
+    }
+  }, [email]);
 
-useEffect(() => {
-  const dadosArmazenados = localStorage.getItem('perfilUsuario');
-  if (dadosArmazenados) {
-    setDados(JSON.parse(dadosArmazenados));
-    setCarregando(false);
-  }
-}, []);
+  useEffect(() => {
+    const dadosArmazenados = localStorage.getItem('perfilUsuario');
+    if (dadosArmazenados) {
+      setDados(JSON.parse(dadosArmazenados));
+      setCarregando(false);
+    }
+  }, []);
 
 
   const handleItemClick = (itemId) => {
@@ -77,17 +77,18 @@ useEffect(() => {
     }
   };
 
-  const redirectToPerfil = () => {
-    navigate("/pageEditPerfil" + `?email=${encodeURIComponent(email)}`);
-  };
-
- const handleLogout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('idSessao');
-  localStorage.removeItem('perfilUsuario'); // <-- limpar perfil salvo
-  navigate('/');
-  setShowModal(false);
+ const redirectToPerfil = () => {
+  navigate(`/pageEditPerfil/${encodeURIComponent(dados.email)}`);
 };
+
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('idSessao');
+    localStorage.removeItem('perfilUsuario'); // <-- limpar perfil salvo
+    navigate('/');
+    setShowModal(false);
+  };
 
 
   const menuItems = [
@@ -124,7 +125,6 @@ useEffect(() => {
 
             <div title='Perfil' onClick={redirectToPerfil} className="profile-section text-center py-3">
               <FaRegUserCircle fontSize={50} />
-
               {isMenuOpen && dados && (
                 <>
                   <div className="fw-bold mt-1">{dados.nomeUsuario}</div>
@@ -132,6 +132,7 @@ useEffect(() => {
                 </>
               )}
             </div>
+
 
             <nav className="sidebar-nav">
               <ul>

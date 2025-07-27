@@ -81,13 +81,11 @@ function App() {
 
 
           {/**Routes de Add de Entidades */}
-          <Route path="pageEditPerfil/:id" element={
-
+          <Route path="pageEditPerfil/:email" element={
 
             <ProtectedRouteAdministrador>
               <EditarFucionario />
             </ProtectedRouteAdministrador>
-
 
           } />
 
