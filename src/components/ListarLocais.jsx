@@ -101,7 +101,7 @@ export default function ListaLocais() {
     if (!localParaDeletar) return;
     setIsDeletando(true);
     try {
-      await axios.delete(`${API_URL}/locais/${localParaDeletar.id}`);
+      await axios.delete(`${API_URL}/locais/Admin/RemoverLocal/${localParaDeletar.id}`);
       setLocais(prev => prev.filter(l => l.id !== localParaDeletar.id));
       setShowConfirmDelete(false);
       toast.success(`Local ${localParaDeletar.nome} removido com sucesso!`);

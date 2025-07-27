@@ -11,8 +11,8 @@ import {
     FaTrash,
     FaChevronLeft,
     FaChevronRight,
-    
-  
+
+
 } from 'react-icons/fa';
 import logotipo from '../assets/logotipo.png';
 
@@ -94,48 +94,48 @@ export default function ListaAnuncios() {
         setAnuncioToDelete(anuncio);
         setShowDeleteModal(true);
     };
-   
 
-const handleDeleteConfirm = async () => {
-  if (!anuncioToDelete) return;
-  setIsDeleting(true);
 
-  try {
-    // Fecha a modal primeiro
-    setShowDeleteModal(false);
+    const handleDeleteConfirm = async () => {
+        if (!anuncioToDelete) return;
+        setIsDeleting(true);
 
-    // Pequeno delay para evitar conflito no React com a desmontagem
-    await new Promise((resolve) => setTimeout(resolve, 300));
+        try {
+            // Fecha a modal primeiro
+            setShowDeleteModal(false);
 
-    // Requisição de exclusão
-    await axios.delete(`${API_URL}/anuncios/${anuncioToDelete.id}`);
+            // Pequeno delay para evitar conflito no React com a desmontagem
+            await new Promise((resolve) => setTimeout(resolve, 300));
 
-    // Atualiza a lista localmente
-    setAnuncios((prev) => prev.filter((a) => a.id !== anuncioToDelete.id));
+            // Requisição de exclusão
+            await axios.delete(`${API_URL}/anuncios/${anuncioToDelete.id}`);
 
-    // Feedback visual
-    toast.success("Anúncio excluído com sucesso!", {
-      position: "top-center",
-      autoClose: 3000,
-    });
+            // Atualiza a lista localmente
+            setAnuncios((prev) => prev.filter((a) => a.id !== anuncioToDelete.id));
 
-    // Ajusta a página se necessário
-    if (currentAnuncios.length === 1 && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
+            // Feedback visual
+            toast.success("Anúncio excluído com sucesso!", {
+                position: "top-center",
+                autoClose: 3000,
+            });
 
-  } catch (error) {
-    console.error("Erro ao excluir anúncio:", error);
-    toast.error("Erro ao excluir anúncio", {
-      position: "top-center",
-      autoClose: 3000,
-    });
-  } finally {
-    setIsDeleting(false);
-    setAnuncioToDelete(null);
-  }
-};
+            // Ajusta a página se necessário
+            if (currentAnuncios.length === 1 && currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+            }
+            console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
+
+        } catch (error) {
+            console.error("Erro ao excluir anúncio:", error);
+            toast.error("Erro ao excluir anúncio", {
+                position: "top-center",
+                autoClose: 3000,
+            });
+        } finally {
+            setIsDeleting(false);
+            setAnuncioToDelete(null);
+        }
+    };
 
     const handleDeleteCancel = () => {
         setShowDeleteModal(false);
@@ -155,124 +155,124 @@ console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
                 draggable
                 pauseOnHover
             />
-           <div className="row bordarDIV">
-             <GraficoAnuncios />
-           </div>
-     
-           <div className="row bordarDIV mt-5">
-             <h4 className="text-white mb-3 ">Lista de Anúncios</h4>
-
-            <div className="mb-3 ">
-                <div className="input-group ">
-                    <span className="input-group-text"><FaSearch /></span>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Buscar por mensagem, local ou criador..."
-                        value={searchTerm}
-                        onChange={(e) => {
-                            setSearchTerm(e.target.value);
-                            setCurrentPage(1);
-                        }}
-                    />
-                </div>
+            <div className="row bordarDIV">
+                <GraficoAnuncios />
             </div>
-            {loading ? (
-                <div className="text-center py-5">
-                    <Spinner animation="border" variant="primary" />
-                    <p className="mt-2">Carregando anúncios...</p>
-                </div>
-            ) : filteredAnuncios.length === 0 ? (
-                <div className="text-center py-5">
-                    <p className="text-white">Nenhum anúncio encontrado.</p>
-                </div>
-            ) : (
 
-                <>
-                    <Row className="g-4  bgGeneral pb-4 mt-3">
-                        {currentAnuncios.map((anuncio) => (
-                            <Col key={anuncio.id} md={6} lg={4}>
-                                <Card className="shadow h-100">
-                                    <Card.Body>
-                                        <Card.Title>
-                                            <FaBullhorn className="me-2" />
-                                            {anuncio.mensagem?.slice(0, 32) || 'Sem título'}
-                                            {anuncio.mensagem?.length > 32 ? '...' : ''}
-                                        </Card.Title>
+            <div className="row bordarDIV mt-5">
+                <h4 className="text-white mb-3 ">Lista de Anúncios</h4>
 
-                                        <div className="text-muted mb-2" style={{ fontSize: '0.85rem' }}>
-                                            <strong>ID:</strong> {anuncio.id}
-                                        </div>
-
-                                        <Card.Text>
-                                            <MdLocationOn className="me-2 text-danger" />
-                                            <strong>Local:</strong> {anuncio.nomeLocal || 'Desconhecido'}<br />
-                                            <FaUser className="me-2 text-warning" />
-                                            <strong>Criador:</strong> {anuncio.criador || 'Não informado'}<br />
-                                            <FaMapMarkerAlt className="me-2 text-info" />
-                                            <strong>Lat/Lng:</strong> {anuncio.latitude}, {anuncio.longitude}<br />
-                                            <FaWifi className="me-2 text-success" />
-                                            <strong>WiFi:</strong> {anuncio.idsWifi?.join(', ') || 'Nenhum'}
-                                        </Card.Text>
-
-                                        <div className="d-flex justify-content-between">
-                                            <Button variant="primary" size="sm" onClick={() => handleView(anuncio)}>
-                                                <FaEye className="me-1" /> Visualizar
-                                            </Button>
-                                            <Button variant="danger" size="sm" onClick={() => handleDeleteClick(anuncio)}>
-                                                <FaTrash className="me-1" /> Excluir
-                                            </Button>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-
-                    {/* Paginação */}
-                    <div className="pagination-container paginaLimt mt-4 d-flex flex-column align-items-center">
-                        <ul className="pagination">
-                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                <button className="page-link" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-                                    <FaChevronLeft />
-                                </button>
-                            </li>
-
-                            {startPage > 1 && (
-                                <>
-                                    <li className="page-item"><button className="page-link" onClick={() => goToPage(1)}>1</button></li>
-                                    {startPage > 2 && <li className="page-item disabled"><span className="page-link">...</span></li>}
-                                </>
-                            )}
-
-                            {pageNumbers.map(number => (
-                                <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
-                                    <button className="page-link" onClick={() => goToPage(number)}>{number}</button>
-                                </li>
-                            ))}
-
-                            {endPage < totalPages && (
-                                <>
-                                    {endPage < totalPages - 1 && <li className="page-item disabled"><span className="page-link">...</span></li>}
-                                    <li className="page-item"><button className="page-link" onClick={() => goToPage(totalPages)}>{totalPages}</button></li>
-                                </>
-                            )}
-
-                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                <button className="page-link" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                                    <FaChevronRight />
-                                </button>
-                            </li>
-                        </ul>
-                        <div className="pagination-info text-white mt-2">
-                            Mostrando {indexOfFirst + 1} - {Math.min(indexOfLast, filteredAnuncios.length)} de {filteredAnuncios.length} anúncios
-                        </div>
+                <div className="mb-3 ">
+                    <div className="input-group ">
+                        <span className="input-group-text"><FaSearch /></span>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Buscar por mensagem, local ou criador..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
                     </div>
-                </>
-            )}
-           </div>
+                </div>
+                {loading ? (
+                    <div className="text-center py-5">
+                        <Spinner animation="border" variant="primary" />
+                        <p className="mt-2">Carregando anúncios...</p>
+                    </div>
+                ) : filteredAnuncios.length === 0 ? (
+                    <div className="text-center py-5">
+                        <p className="text-white">Nenhum anúncio encontrado.</p>
+                    </div>
+                ) : (
 
-              {/* Modal de confirmação de exclusão */}
+                    <>
+                        <Row className="g-4  bgGeneral pb-4 mt-3">
+                            {currentAnuncios.map((anuncio) => (
+                                <Col key={anuncio.id} md={6} lg={4}>
+                                    <Card className="shadow h-100">
+                                        <Card.Body>
+                                            <Card.Title>
+                                                <FaBullhorn className="me-2" />
+                                                {anuncio.mensagem?.slice(0, 32) || 'Sem título'}
+                                                {anuncio.mensagem?.length > 32 ? '...' : ''}
+                                            </Card.Title>
+
+                                            <div className="text-muted mb-2" style={{ fontSize: '0.85rem' }}>
+                                                <strong>ID:</strong> {anuncio.id}
+                                            </div>
+
+                                            <Card.Text>
+                                                <MdLocationOn className="me-2 text-danger" />
+                                                <strong>Local:</strong> {anuncio.nomeLocal || 'Desconhecido'}<br />
+                                                <FaUser className="me-2 text-warning" />
+                                                <strong>Criador:</strong> {anuncio.criador || 'Não informado'}<br />
+                                                <FaMapMarkerAlt className="me-2 text-info" />
+                                                <strong>Lat/Lng:</strong> {anuncio.latitude}, {anuncio.longitude}<br />
+                                                <FaWifi className="me-2 text-success" />
+                                                <strong>WiFi:</strong> {anuncio.idsWifi?.join(', ') || 'Nenhum'}
+                                            </Card.Text>
+
+                                            <div className="d-flex justify-content-between">
+                                                <Button variant="primary" size="sm" onClick={() => handleView(anuncio)}>
+                                                    <FaEye className="me-1" /> Visualizar
+                                                </Button>
+                                                <Button variant="danger" size="sm" onClick={() => handleDeleteClick(anuncio)}>
+                                                    <FaTrash className="me-1" /> Excluir
+                                                </Button>
+                                            </div>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+
+                        {/* Paginação */}
+                        <div className="pagination-container paginaLimt mt-4 d-flex flex-column align-items-center">
+                            <ul className="pagination">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+                                        <FaChevronLeft />
+                                    </button>
+                                </li>
+
+                                {startPage > 1 && (
+                                    <>
+                                        <li className="page-item"><button className="page-link" onClick={() => goToPage(1)}>1</button></li>
+                                        {startPage > 2 && <li className="page-item disabled"><span className="page-link">...</span></li>}
+                                    </>
+                                )}
+
+                                {pageNumbers.map(number => (
+                                    <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+                                        <button className="page-link" onClick={() => goToPage(number)}>{number}</button>
+                                    </li>
+                                ))}
+
+                                {endPage < totalPages && (
+                                    <>
+                                        {endPage < totalPages - 1 && <li className="page-item disabled"><span className="page-link">...</span></li>}
+                                        <li className="page-item"><button className="page-link" onClick={() => goToPage(totalPages)}>{totalPages}</button></li>
+                                    </>
+                                )}
+
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                                        <FaChevronRight />
+                                    </button>
+                                </li>
+                            </ul>
+                            <div className="pagination-info text-white mt-2">
+                                Mostrando {indexOfFirst + 1} - {Math.min(indexOfLast, filteredAnuncios.length)} de {filteredAnuncios.length} anúncios
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
+
+            {/* Modal de confirmação de exclusão */}
             <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirmar Exclusão</Modal.Title>
@@ -297,7 +297,7 @@ console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
 
             {/* Modal de visualização */}
             <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
-                <Modal.Header closeButton  style={{ backgroundColor: '#e3e3e6ff' }}>
+                <Modal.Header closeButton style={{ backgroundColor: '#e3e3e6ff' }}>
                     <Modal.Title className="text-black">
                         <FaBullhorn className="me-2" />
                         Detalhes do Anúncio
@@ -312,7 +312,7 @@ console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
                                 {modalContent.mensagem || 'Sem título'}
                             </h4>
 
-                            <Card className="mb-3 shadow-sm border-0 " style={{ backgroundColor: '#e3e3e6ff' }}> 
+                            <Card className="mb-3 shadow-sm border-0 " style={{ backgroundColor: '#e3e3e6ff' }}>
                                 <Card.Body>
                                     <Row className="mb-3">
                                         <Col md={6} className="mb-2">
@@ -357,17 +357,18 @@ console.log("Tentando apagar anúncio com id:", anuncioToDelete.id);
                             <p className="mt-2">Carregando detalhes...</p>
                         </div>
                     )}
-                        <Button variant="outline-danger" className='mt-2 float-end' onClick={handleCloseModal}>
-                       <b> Fechar</b>
-                    </Button>
+
                 </Modal.Body>
 
                 <Modal.Footer className="bg-light">
-                <img src={logotipo} alt="..." width={220} className='mx-auto d-block' />
+                    <img src={logotipo} alt="..." width={220} className='mx-auto d-block' />
+                    <Button variant="outline-danger" className='mt-2 float-end' onClick={handleCloseModal}>
+                        <b> Fechar</b>
+                    </Button>
                 </Modal.Footer>
             </Modal>
 
-         
+
         </div>
     );
 }
