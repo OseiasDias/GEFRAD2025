@@ -80,7 +80,7 @@ const GraficoUsuabilidade = () => {
   }, [totalUtilizadores, totalAnuncios, totalEntregas]);
 
   return (
-    <div className="chart-container my-4">
+    <div className="chart-container my-4 bordarDIV">
       <h5 className="chart-title text-center">Estatísticas de Utilização</h5>
 
       {/* ✅ Container do Toast */}

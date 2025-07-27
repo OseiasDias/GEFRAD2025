@@ -147,7 +147,7 @@ const Calendar = ({
   };
 
   return (
-    <div className="calendar-container">
+    <div className="calendar-container bordarDIV">
       <div className="calendar-header">
         <button onClick={prevMonth} className="nav-button">
           <FaChevronLeft />

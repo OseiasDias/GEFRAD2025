@@ -19,7 +19,7 @@ export default function PieColumnChart() {
             category: "Total Anúncios",
             value: total,
             sliceSettings: {
-              fill: am5.color(0x68ad5c),
+              fill: am5.color(0xdddddd),
             },
             breakdown: [
               { category: "Confirmados", value: total * 0.5 },
@@ -31,6 +31,7 @@ export default function PieColumnChart() {
 
         const root = am5.Root.new("chartdiv");
         chartRoot.current = root;
+
         root.setThemes([am5themes_Animated.new(root)]);
 
         const container = root.container.children.push(
@@ -41,9 +42,9 @@ export default function PieColumnChart() {
           })
         );
 
-        // ================
+        // ========================
         // COLUMN CHART
-        // ================
+        // ========================
         const columnChart = container.children.push(
           am5xy.XYChart.new(root, {
             width: am5.p50,
@@ -64,6 +65,12 @@ export default function PieColumnChart() {
           })
         );
 
+        // ✅ Deixar labels do eixo Y brancos
+        yAxis.get("renderer").labels.template.setAll({
+          fill: am5.color(0xffffff) ,
+          fontSize: 14,
+        });
+
         const xAxis = columnChart.xAxes.push(
           am5xy.ValueAxis.new(root, {
             renderer: am5xy.AxisRendererX.new(root, {
@@ -71,6 +78,12 @@ export default function PieColumnChart() {
             }),
           })
         );
+
+        // ✅ Deixar labels do eixo X brancos
+        xAxis.get("renderer").labels.template.setAll({
+          fill: am5.color(0xffffff),
+          fontSize: 12,
+        });
 
         const columnSeries = columnChart.series.push(
           am5xy.ColumnSeries.new(root, {
@@ -83,15 +96,13 @@ export default function PieColumnChart() {
 
         columnSeries.columns.template.setAll({
           tooltipText: "{categoryY}: {valueX}",
-          fillOpacity: 0.8,
-          strokeOpacity: 0,
         });
 
         columnChart.appear(1000, 100);
 
-        // ================
+        // ========================
         // PIE CHART
-        // ================
+        // ========================
         const pieChart = container.children.push(
           am5percent.PieChart.new(root, {
             width: am5.p50,
@@ -111,11 +122,10 @@ export default function PieColumnChart() {
           strokeOpacity: 0,
         });
 
-        // ➜ LABELS CENTRAL
         const label1 = pieChart.seriesContainer.children.push(
           am5.Label.new(root, {
             text: "",
-            fontSize: 25,
+            fontSize: 22,
             fontWeight: "bold",
             fill: am5.color(0xffffff),
             centerX: am5.p50,
@@ -142,7 +152,6 @@ export default function PieColumnChart() {
           }
 
           label1.setAll({
-            fill: am5.color(0xffffff),
             text: root.numberFormatter.format(
               slice.dataItem.get("valuePercentTotal"),
               "#.'%'"
@@ -150,7 +159,6 @@ export default function PieColumnChart() {
           });
 
           label2.setAll({
-            fill: am5.color(0xffffff),
             text: slice.dataItem.get("category"),
           });
 
@@ -167,13 +175,11 @@ export default function PieColumnChart() {
 
         pieSeries.labels.template.set("forceHidden", true);
         pieSeries.ticks.template.set("forceHidden", true);
-
         pieSeries.data.setAll(data);
 
         pieSeries.events.on("datavalidated", () => {
           pieSeries.slices.getIndex(0).set("active", true);
         });
-
       } catch (err) {
         console.error("Erro ao carregar dados:", err);
       }
@@ -189,11 +195,15 @@ export default function PieColumnChart() {
   }, []);
 
   return (
-    <div >
+    <div>
       <h4 className="text-xl font-bold mb-4 text-white">
         Gráfico Total de Anúncios
       </h4>
-      <div id="chartdiv" style={{ width: "100%", height: "240px" }}  className="bgGeneral py-2"></div>
+      <div
+        id="chartdiv"
+        style={{ width: "100%", height: "240px" }}
+        className="bgGeneral py-2"
+      ></div>
     </div>
   );
 }

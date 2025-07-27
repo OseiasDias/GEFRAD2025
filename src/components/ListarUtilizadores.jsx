@@ -18,7 +18,6 @@ import logotipo from '../assets/logotipo.png';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoMdPersonAdd } from 'react-icons/io';
-import GraficoUtilizador from './GraficoUtilizador.jsx';
 const API_URL = import.meta.env.VITE_API_URL;
 
 
@@ -255,7 +254,7 @@ export default function ListaUtilizadores() {
     }
 
     return (
-      <div className="pagination-container paginaLimt">
+      <div className="pagination-container paginaLimt ">
         <ToastContainer position="top-center" autoClose={3000} />
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -316,16 +315,10 @@ export default function ListaUtilizadores() {
 
   return (
     <>
-      <div className="funcionarios-page container-fluid p-4">
-        {/* Adicione este botão no cabeçalho (ajuste conforme seu layout) */}
-        <div className="row">
-          <h4 className="text-white mb-4">Gráfico de Crescimento de Utilizadores</h4>
+      <div className="funcionarios-page mt-5 container-fluid p-4 bordarDIV">
+  
 
-          <GraficoUtilizador />
-        </div>
-
-
-        <div className="row mb-4">
+        <div className="row mb-4 ">
           <div className="col-12">
 
             <div className="d-flex justify-content-between mt-5">

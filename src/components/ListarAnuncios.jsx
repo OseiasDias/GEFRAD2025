@@ -147,8 +147,12 @@ export default function ListaAnuncios() {
                 draggable
                 pauseOnHover
             />
-           <div className="row"> <GraficoAnuncios /></div>
-            <h4 className="text-white mb-3 mt-5">Lista de Anúncios</h4>
+           <div className="row bordarDIV">
+             <GraficoAnuncios />
+           </div>
+     
+           <div className="row bordarDIV mt-5">
+             <h4 className="text-white mb-3 ">Lista de Anúncios</h4>
 
             <div className="mb-3 ">
                 <div className="input-group ">
@@ -258,6 +262,7 @@ export default function ListaAnuncios() {
                     </div>
                 </>
             )}
+           </div>
 
             {/* Modal de visualização */}
             <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
