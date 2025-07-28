@@ -588,7 +588,7 @@ export default function ListaUtilizadores() {
                             </div>
 
 
-                            <div className="col-lg-6 mb-3 ">
+                            <div className="col-lg-6 mb-3 opacity-0">
                                 <Form.Group>
                                     <Form.Label>
                                         <FaPhone className="me-1 text-primary" />

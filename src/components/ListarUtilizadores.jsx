@@ -65,34 +65,7 @@ export default function ListaUtilizadores() {
   console.log(emailSelecionado);
   // Função para adicionar administrador
   const handleAddAdmin = async () => {
-    // Validação
-    const errors = {};
-    if (!newAdmin.nomeUsuario.trim()) {
-      errors.nomeUsuario = 'Nome é obrigatório';
-    } else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(newAdmin.nomeUsuario.trim())) {
-      errors.nomeUsuario = 'Nome deve conter apenas letras e espaços (sem números ou caracteres especiais)';
-    } else if (newAdmin.nomeUsuario.trim().length < 3) {
-      errors.nomeUsuario = 'Nome deve ter no mínimo 3 caracteres';
-    }
-    if (!newAdmin.email.trim()) {
-      errors.email = 'Email é obrigatório';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newAdmin.email.trim())) {
-      errors.email = 'Formato de email inválido';
-    }
-    if (!newAdmin.palavraPasse) {
-      errors.palavraPasse = 'Senha é obrigatória';
-    } else if (newAdmin.palavraPasse.length < 8) {
-      errors.palavraPasse = 'Senha deve ter no mínimo 8 caracteres';
-    } else if (!/^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newAdmin.palavraPasse)) {
-      errors.palavraPasse = 'Senha deve conter letras e números';
-    }
-    if (!newAdmin.telefone.trim()) errors.telefone = 'Telefone é obrigatório';
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
+    
     setIsAddingAdmin(true);
 
     try {
