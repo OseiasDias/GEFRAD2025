@@ -73,7 +73,7 @@ export default function MenuPrincipal({ children }) {
       setShowModal(true);
     } else {
       const path = menuItems.find(item => item.id === itemId)?.path;
-      if (path) navigate(path + `?email=${encodeURIComponent(email)}`);
+      if (path) navigate(path);
       if (isMobile) closeMenu();
     }
   };
