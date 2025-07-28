@@ -5,9 +5,9 @@ import { Form, Modal, Spinner } from 'react-bootstrap';
 import { GrUpdate } from "react-icons/gr";
 import { Button } from 'react-bootstrap';
 import { FaMoneyBillWave, FaTimesCircle, FaSave, FaCoins } from "react-icons/fa";
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import {
-    FaSearch, FaTrash, FaUser, FaPhone, FaEye, FaEllipsisV,
+    FaSearch, FaTrash, FaUser, FaPhone, FaEllipsisV,
     FaUserShield, FaUserTie, FaCheckCircle, FaBan, FaHourglassHalf, FaEnvelope,
     FaChevronLeft, FaChevronRight,
 } from 'react-icons/fa';
@@ -52,7 +52,7 @@ export default function ListaUtilizadores() {
         telefone: '',
         tipo: 'ADMIN'
     });
-
+    const [showPassword, setShowPassword] = useState(false);
 
 
     const [formErrors, setFormErrors] = useState({});
@@ -513,7 +513,7 @@ export default function ListaUtilizadores() {
                 centered
                 scrollable
             >
-                <Modal.Header closeButton className="bg-success text-white">
+                <Modal.Header closeButton className="text-black" style={{ backgroundColor: '#e3e3e6ff' }}>
                     <Modal.Title>
                         <FaUserPlus className="me-2" /> Adicionar Novo Administrador
                     </Modal.Title>
@@ -570,23 +570,29 @@ export default function ListaUtilizadores() {
                                         <FaLock className="me-1 text-primary" />
                                         Senha *
                                     </Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="palavraPasse"
-                                        placeholder="Digite a senha"
-                                        value={newAdmin.palavraPasse}
-                                        onChange={handleAdminInputChange}
-                                        isInvalid={!!formErrors.palavraPasse}
-                                        required
-                                    />
-
-
-                                    <Form.Control.Feedback type="invalid">
-                                        {formErrors.palavraPasse}
-                                    </Form.Control.Feedback>
+                                    <div className="input-group">
+                                        <Form.Control
+                                            type={showPassword ? "text" : "password"}
+                                            name="palavraPasse"
+                                            placeholder="Digite a senha"
+                                            value={newAdmin.palavraPasse}
+                                            onChange={handleAdminInputChange}
+                                            isInvalid={!!formErrors.palavraPasse}
+                                            required
+                                        />
+                                        <button
+                                            className="btn btn-outline-secondary"
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </button>
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.palavraPasse}
+                                        </Form.Control.Feedback>
+                                    </div>
                                 </Form.Group>
                             </div>
-
 
                             <div className="col-lg-6 mb-3 opacity-0">
                                 <Form.Group>
@@ -611,7 +617,12 @@ export default function ListaUtilizadores() {
 
                         </div>
                     </Form>
-                    <div className="footerModal bg-danger">
+                   
+                </Modal.Body>
+
+                <Modal.Footer style={{ backgroundColor: '#e3e3e6ff' }} className='py-1 d-flex justify-content-center'>
+                    <img src={logotipo} alt="..." width={220} className='d-block mx-auto' />
+                 <div className="footerModal ">
 
                         <button
                             className="btn btn-success float-end ms-2"
@@ -659,10 +670,6 @@ export default function ListaUtilizadores() {
                         </button>
 
                     </div>
-                </Modal.Body>
-
-                <Modal.Footer className="bg-light">
-                    <img src={logotipo} alt="..." width={220} className='d-block mx-auto' />
                 </Modal.Footer>
             </Modal>
 
