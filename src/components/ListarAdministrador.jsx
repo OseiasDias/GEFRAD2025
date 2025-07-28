@@ -54,6 +54,7 @@ export default function ListaUtilizadores() {
     });
 
 
+
     const [formErrors, setFormErrors] = useState({});
     const [isAddingAdmin, setIsAddingAdmin] = useState(false);
 
@@ -67,10 +68,25 @@ export default function ListaUtilizadores() {
     const handleAddAdmin = async () => {
         // Validação
         const errors = {};
-        if (!newAdmin.nomeUsuario.trim()) errors.nomeUsuario = 'Nome é obrigatório';
-        if (!newAdmin.email.trim()) errors.email = 'Email é obrigatório';
-        if (!newAdmin.palavraPasse) errors.palavraPasse = 'Senha é obrigatória';
-        if (!newAdmin.telefone.trim()) errors.telefone = 'Telefone é obrigatório';
+        if (!newAdmin.nomeUsuario.trim()) {
+            errors.nomeUsuario = 'Nome é obrigatório';
+        } else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(newAdmin.nomeUsuario.trim())) {
+            errors.nomeUsuario = 'Nome deve conter apenas letras e espaços (sem números ou caracteres especiais)';
+        } else if (newAdmin.nomeUsuario.trim().length < 3) {
+            errors.nomeUsuario = 'Nome deve ter no mínimo 3 caracteres';
+        }
+        if (!newAdmin.email.trim()) {
+            errors.email = 'Email é obrigatório';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newAdmin.email.trim())) {
+            errors.email = 'Formato de email inválido';
+        }
+        if (!newAdmin.palavraPasse) {
+            errors.palavraPasse = 'Senha é obrigatória';
+        } else if (newAdmin.palavraPasse.length < 8) {
+            errors.palavraPasse = 'Senha deve ter no mínimo 8 caracteres';
+        } else if (!/^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newAdmin.palavraPasse)) {
+            errors.palavraPasse = 'Senha deve conter letras e números';
+        }
 
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
@@ -118,7 +134,7 @@ export default function ListaUtilizadores() {
         }
     };
 
- 
+
 
 
     const atualizarSaldo = async () => {
@@ -423,7 +439,7 @@ export default function ListaUtilizadores() {
                                     </td>
 
 
-                                    
+
                                     <td>
                                         <Dropdown>
                                             <Dropdown.Toggle variant="outline-secondary" className="action-dropdown">
@@ -563,13 +579,16 @@ export default function ListaUtilizadores() {
                                         isInvalid={!!formErrors.palavraPasse}
                                         required
                                     />
+
+
                                     <Form.Control.Feedback type="invalid">
                                         {formErrors.palavraPasse}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
 
-                            <div className="col-lg-6 mb-3 opacity-0">
+
+                            <div className="col-lg-6 mb-3 ">
                                 <Form.Group>
                                     <Form.Label>
                                         <FaPhone className="me-1 text-primary" />
@@ -766,4 +785,3 @@ export default function ListaUtilizadores() {
         </>
     );
 }
-
