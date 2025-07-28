@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function HomeOficinaAdmin() {
   return (
     <>
-        <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={3000} />
 
       <MenuPrincipal nomeUsuario="Administrador" tipo="Admin">
         <EntidadesPrincipal />
