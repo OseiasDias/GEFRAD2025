@@ -1,0 +1,120 @@
+/* ============================
+   SEÇÃO COM BACKGROUND VISÍVEL
+=============================== */
+.nossosServicosSection {
+    padding: 60px 0;
+    background: linear-gradient(
+                rgba(0, 0, 0, 0.6),
+                rgba(0, 0, 0, 0.75)
+            ),
+            url('../../assets/servicos/StockCake.com-Construction Work Ongoing.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #ffffff;
+}
+
+/* ============================
+   CARD PRINCIPAL (apenas 1!)
+=============================== */
+.servicoCard {
+    background: rgba(255, 255, 255, 0.12); /* glass */
+    backdrop-filter: blur(6px);
+    border-radius: 18px;
+    padding: 25px;
+    min-height: 330px;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    transition: 
+        transform .35s ease,
+        box-shadow .35s ease,
+        border .35s ease;
+
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================
+   HOVER ANIMADO
+=============================== */
+.servicoCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.45);
+    border-color: rgba(255, 255, 255, 0.40);
+}
+
+/* ============================
+   REFLEXO / BRILHO NO HOVER
+=============================== */
+.servicoCard::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -40%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 225, 180, 0.22),
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.servicoCard:hover::before {
+    opacity: 1;
+}
+
+/* ============================
+   ÍCONES
+=============================== */
+.iconeWrapper {
+    font-size: 3rem;
+    color: #FFD6A1;
+    margin-bottom: 15px;
+    animation: subir .6s ease;
+}
+
+.iconServico {
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.4));
+}
+
+/* ============================
+   TÍTULOS COM GRADIENTE PREMIUM
+=============================== */
+.tituloServico {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+
+    background: linear-gradient(90deg, #ffc49a, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ============================
+   LISTAGEM
+=============================== */
+.listaServicos li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* ============================
+   ANIMAÇÃO
+=============================== */
+@keyframes subir {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

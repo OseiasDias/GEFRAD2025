@@ -1,0 +1,11 @@
+
+.homePageStyle {
+    background: linear-gradient(
+        rgba(0,0,0,0.9), 
+       rgba(0,0,0,0.3)
+    ),
+    url('/src/assets/homePage/StockCake.com-Construction in Progress.jpg') no-repeat center center;
+    
+    background-size: cover;
+    background-attachment: fixed; /* opcional – efeito parallax */
+}

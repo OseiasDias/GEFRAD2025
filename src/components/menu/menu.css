@@ -1,0 +1,36 @@
+.btn-pedirOracamento {
+    /* Gradiente inspirado no texto do banner */
+    background: linear-gradient(90deg, #A0522D, #303030);
+    color: white;
+    padding: 10px 15px !important;
+    border-radius: 10px;
+    border: 3px solid #A0522D; /* borda combinando com o gradiente */
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    float: right;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    outline: none;
+}
+
+.btn-pedirOracamento:hover {
+    /* Fundo mais escuro no hover para destaque */
+    background: linear-gradient(90deg, #8B3E1F, #202020);
+    color: #fff;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    border-color: #8B3E1F;
+    outline: 3px solid #8B3E1F; /* efeito outline ao passar o mouse */
+    outline-offset: 4px;
+  
+}
+
+
+@media (max-width: 992px) {
+    .btn-pedirOracamento {
+margin-right: 10px;
+    }
+}

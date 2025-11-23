@@ -1,0 +1,31 @@
+.subtitulos {
+    font-size: 4em; /* tamanho relativo à largura da tela */
+    font-weight: bold;
+
+    /* Gradiente no texto */
+    background: linear-gradient(90deg, #A0522D, #303030);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Bordas ou sombra */
+    -webkit-text-stroke: 1px #ffffff;
+    text-stroke: 1px #ffffff;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+
+    text-align: start; /* centraliza horizontalmente */
+    margin: 0 auto;
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+    .subtitulos {
+        font-size: 7vw;
+    }
+}
+
+/* Celulares */
+@media (max-width: 576px) {
+    .subtitulos {
+        font-size: 9vw;
+    }
+}

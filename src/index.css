@@ -1,23 +1,21 @@
 
-.redirecionarIcone {
-  color: #ffffff;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  margin-bottom: -20px !important;
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Courier New', Courier, monospace;
 }
 
-.redirecionarIcone :hover {
-  color: #ffcc00; /* Cor amarela ao passar o mouse */
+:root {
+  --cor-primaria: #A0522D; /* Castanho */
+  --cor-secundaria: #303030; /* Cinza escuro */
+  --cor-terciaria: linear-gradient(90deg, #A0522D, #303030);; /* Branco */
+
 }
 
-.bgGeneral {
-  background-color: #212529; /* Cor de fundo geral */
-  border-radius: 8px; /* Bordas arredondadas */
-}
+body {
+    background-color: #f8f8f8; /* bege muito claro / fundo suave */
+  
 
-.bordarDIV{
-  border-bottom: 3px solid #fff;
-  border-top: 3px solid #fff;
-  padding: 20px 0;
-  border-radius: 8px; /* Bordas arredondadas */
 }
