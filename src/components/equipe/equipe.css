@@ -1,0 +1,75 @@
+.equipeSection {
+
+padding: 70px 0;
+color: #222; /* texto escuro para contraste */
+}
+
+/* Texto institucional */
+.descricaoEquipe {
+max-width: 850px;
+font-size: 1.05rem;
+color: #444;
+opacity: 0.9;
+}
+
+/* CARD */
+.equipeCard {
+background: linear-gradient(90deg, #A0522D, #303030); /* gradient terciário */
+border-radius: 20px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+transition: transform 0.35s ease, box-shadow 0.35s ease;
+border: 1px solid rgba(255,255,255,0.2); /* borda clara para contraste */
+color: #fff; /* texto claro sobre o gradiente */
+}
+
+.equipeCard:hover {
+transform: translateY(-8px);
+box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+border: 1px solid rgba(255,255,255,0.35);
+}
+
+/* FOTO */
+.equipeFoto {
+width: 125px;
+height: 125px;
+object-fit: cover;
+border-radius: 50%;
+border: 3px solid rgba(255,255,255,0.7);
+box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+/* TEXTOS */
+.nomeMembro {
+font-size: 1.4rem;
+font-weight: 700;
+color: #fff;
+}
+
+.cargoMembro {
+font-size: 1rem;
+opacity: 0.85;
+color: #f0e0d0;
+}
+
+.descricaoMembro {
+font-size: 0.95rem;
+opacity: 0.8;
+color: #e8d8c8;
+}
+
+/* ICONES SOCIAIS */
+.socialIcons a {
+color: #fff8e1; /* ícones claros sobre gradient */
+font-size: 1.5rem;
+margin: 0 10px;
+transition: color 0.3s ease, transform 0.3s;
+}
+
+.socialIcons a:hover {
+color: #ffd699;
+transform: scale(1.25);
+}
+
+.descricaoEquip {
+ text-align: justify;
+  }

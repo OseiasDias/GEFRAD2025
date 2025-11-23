@@ -1,9 +1,10 @@
 import React from 'react';
 import './nossosServicos.css';
 
-import { FaTools } from "react-icons/fa";        // Construção Civil
+import { FaArrowRight, FaItunes, FaTools } from "react-icons/fa";        // Construção Civil
 import { MdEngineering } from "react-icons/md"; // Arquitetura e Engenharia
 import { RiShakeHandsFill } from "react-icons/ri"; // Consultoria
+import { FaBuildingCircleArrowRight } from 'react-icons/fa6';
 
 const servicos = [
     {
@@ -56,11 +57,14 @@ export default function NossosServicos() {
 
                                 <h3 className="tituloServico">{servico.titulo}</h3>
 
-                                <ul className="listaServicos">
+                                <ul className="listaServicos" style={{listStyleType: 'none', paddingLeft: 0}}>
                                     {servico.itens.map((item, idx) => (
-                                        <li key={idx}>{item}</li>
+                                        <li key={idx}>
+                                            <FaBuildingCircleArrowRight fontSize={20} color=' #ffc49a' />&nbsp;&nbsp;{item}
+                                        </li>
                                     ))}
                                 </ul>
+
 
                             </div>
                         </div>

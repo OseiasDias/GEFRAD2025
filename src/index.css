@@ -10,7 +10,7 @@
 :root {
   --cor-primaria: #A0522D; /* Castanho */
   --cor-secundaria: #303030; /* Cinza escuro */
-  --cor-terciaria: linear-gradient(90deg, #A0522D, #303030);; /* Branco */
+  --cor-terciaria: linear-gradient(90deg, #A0522D, #303030); /* Branco */
 
 }
 

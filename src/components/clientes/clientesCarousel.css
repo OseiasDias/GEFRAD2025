@@ -1,0 +1,52 @@
+.clientesSection {
+  position: relative;
+  color: #fff;
+  padding: 60px 0;
+  
+  /* imagem de fundo */
+  background: url('../../assets/clientes/cliente001.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* Overlay escuro sobre a imagem */
+.clientesSection::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.8); /* fundo escuro semi-transparente */
+  z-index: 1;
+}
+
+.clientesSection .container {
+  position: relative;
+  z-index: 2; /* conteúdo acima do overlay */
+}
+
+.carouselContent {
+  min-height: 200px;
+  padding: 30px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #A0522D, #303030); /* cor do slide */
+  max-width: 600px;
+  margin: 0 auto;
+  transition: all 0.5s ease-in-out;
+}
+
+.carouselContent h4,
+.carouselContent p {
+  color: #fff; /* texto branco */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #fff; /* seta branca */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
