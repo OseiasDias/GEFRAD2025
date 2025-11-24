@@ -1,6 +1,8 @@
 import Banner from "../../components/banner/banner";
 import ClientesCarousel from "../../components/clientes/ClientesCarousel";
 import Equipe from "../../components/equipe/Equipe";
+import Estatisticas from "../../components/estatisticas/Estatisticas";
+import Footer from "../../components/footer/Footer";
 import Menu from "../../components/menu/Menu";
 import ProjectosExecutados from "../../components/projectos/ProjectosExecutados";
 import NossosServicos from "../../components/servicos/NossosServicos";
@@ -31,6 +33,12 @@ export default function HomePage() {
 
             <section>
                 <ProjectosExecutados />
+            </section>
+            <section>
+                 <Estatisticas />
+            </section>
+            <section>
+                <Footer />
             </section>
         </>
 

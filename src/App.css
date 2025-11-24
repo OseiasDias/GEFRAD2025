@@ -19,13 +19,13 @@
 /* Tablets */
 @media (max-width: 992px) {
     .subtitulos {
-        font-size: 7vw;
+        font-size: 5vw;
     }
 }
 
 /* Celulares */
 @media (max-width: 576px) {
     .subtitulos {
-        font-size: 9vw;
+        font-size: 8vw;
     }
 }

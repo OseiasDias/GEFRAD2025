@@ -4,18 +4,23 @@ import Tabs from "react-bootstrap/Tabs";
 import "./projectosExecutados.css"; // CSS atualizado
 
 // Importando todas as imagens
-/*import residencia1 from "../../assets/projectos/residencia1.jpg";
-import residencia2 from "../../assets/projectos/residencia2.jpg";*/
+import residencia1 from "../../assets/projectos/residencia (1).jpg";
+import residencia2 from "../../assets/projectos/residencia (2).jpg";
+import residencia3 from "../../assets/projectos/residencia (3).jpg";
+import residencia4 from "../../assets/projectos/residencia (4).jpg";
 import cafe1 from "../../assets/projectos/cafe (1).jpg";
 import cafe2 from "../../assets/projectos/cafe (2).jpg";
-import Modal from "react-bootstrap/Modal";
-/*import acabamento1 from "../../assets/projectos/acabamento1.jpg";
-import acabamento2 from "../../assets/projectos/acabamento2.jpg";
-import interior1 from "../../assets/projectos/interior1.jpg";
-import interior2 from "../../assets/projectos/interior2.jpg";
-import comercial1 from "../../assets/projectos/comercial1.jpg";
-import comercial2 from "../../assets/projectos/comercial2.jpg";
-*/
+import { Modal, Button } from "react-bootstrap";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import acabamento1 from "../../assets/projectos/acabamento (1).jpg";
+import acabamento2 from "../../assets/projectos/acabamento (2).jpg";
+import interior1 from "../../assets/projectos/interior (1).jpg";
+import interior2 from "../../assets/projectos/interior (2).jpg";
+import interior3 from "../../assets/projectos/interior (3).jpg";
+import interior4 from "../../assets/projectos/interior (4).jpg";
+import edificio1 from "../../assets/projectos/edificio (1).jpg";
+import edificio2 from "../../assets/projectos/edificio (2).jpg";
+
 const projectos = [
     {
         titulo: "Residência",
@@ -29,7 +34,7 @@ const projectos = [
             "Memória Descritiva",
             "Croqui de Localização",
         ],
-        fotos: [cafe1, cafe2],
+        fotos: [residencia1,residencia2,residencia3,residencia4],
     },
     {
         titulo: "Restaurante e Café",
@@ -52,7 +57,7 @@ const projectos = [
             "Orçamento Completo",
             "Gestão e Direção da Obra",
         ],
-        fotos: [cafe1, cafe2],
+          fotos: [acabamento1, acabamento2],
     },
     {
         titulo: "Design de Interior de uma Vivenda",
@@ -63,7 +68,7 @@ const projectos = [
             "Orçamento Completo",
             "Gestão e Direção da Obra",
         ],
-        fotos: [cafe1, cafe2],
+        fotos: [interior1 , interior2,interior3 , interior4 ],
     },
     {
         titulo: "Edifício Comercial",
@@ -75,23 +80,39 @@ const projectos = [
             "Orçamento Completo",
             "Croqui de Localização",
         ],
-        fotos: [cafe1, cafe2],
+        fotos: [edificio2, edificio1],
     },
 ];
 
 export default function ProjectosExecutados() {
-    const [showModal, setShowModal] = useState(false);
-    const [fotoAtiva, setFotoAtiva] = useState(null);
+    const [indexAtivo, setIndexAtivo] = useState(0);
 
-    const abrirModal = (foto) => {
-        setFotoAtiva(foto);
+    const abrirModal = (fotos, index) => {
+        setFotosModal(fotos);
+        setIndexAtivo(index);
         setShowModal(true);
     };
 
-    const fecharModal = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [fotosModal, setFotosModal] = useState([]);
+
+
+
+
+     const fecharModal = () => {
         setShowModal(false);
-        setFotoAtiva(null);
+        setFotosModal([]);
+        setIndexAtivo(0);
     };
+
+     const proximaFoto = () => {
+        setIndexAtivo((prev) => (prev + 1) % fotosModal.length);
+    };
+
+    const fotoAnterior = () => {
+        setIndexAtivo((prev) => (prev - 1 + fotosModal.length) % fotosModal.length);
+    };
+
     return (
         <section className="projectosSection py-5">
             <div className="container">
@@ -115,36 +136,74 @@ export default function ProjectosExecutados() {
 
                                     <div className="col-lg-8">
                                         <div className="projectoFotos d-flex flex-wrap mt-3">
-                                            {(proj.fotos || []).map((foto, i) => (
-                                                <div key={i} className="fotoCar col-md-6 mb-3">
-                                                    <img
-                                                        src={foto}
-                                                        alt={proj.titulo}
-                                                        className="img-fluid rounded clickable"
-                                                        onClick={() => abrirModal(foto)}
-                                                    />
-                                                </div>
-                                            ))}
+                                            <div className="row">
+                                                {(proj.fotos || []).map((foto, i) => (
+                                                    <div key={i} className="fotoCar col-md-6 mb-3">
+                                                        <img
+                                                            src={foto}
+                                                            alt={proj.titulo}
+                                                            className="img-fluid rounded clickable"
+                                                            onClick={() => abrirModal(proj.fotos, i)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <span className="text-end fw-bold fs-0">Gefrad Consulting</span>
                             </div>
+                            
                         </Tab>
+                        
                     ))}
+                    
                 </Tabs>
+                
             </div>
 
             {/* Modal para exibir foto em tamanho grande */}
-            <Modal show={showModal} onHide={fecharModal} centered size="xl" style={{backgroundColor:"rgba(0, 0, 0, 0.6)"}}>
-                <Modal.Body className="p-0 d-flex justify-content-center align-items-center" style={{ maxHeight: "90vh",backgroundColor:"rgba(0, 0, 0, 0.6)" }}>
-                    {fotoAtiva && (
+            {/* Modal para exibir foto em tamanho grande */}
+            <Modal
+                show={showModal}
+                onHide={fecharModal}
+                centered
+                size="xl"
+                style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+            >
+                <Modal.Body
+                    className="p-0 d-flex justify-content-center align-items-center position-relative"
+                    style={{ maxHeight: "90vh", backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+                >
+                    {/* Seta esquerda */}
+                    <Button
+                        variant="link"
+                        className="position-absolute start-0 top-50 translate-middle-y text-white"
+                        onClick={fotoAnterior}
+                        style={{ fontSize: "2rem", zIndex: 10 }}
+                    >
+                        <FaChevronLeft />
+                    </Button>
+
+                    {/* Imagem */}
+                    {fotosModal[indexAtivo] && (
                         <img
-                            src={fotoAtiva}
-                            alt="Projeto"
+                            src={fotosModal[indexAtivo]}
+                            alt={`Projeto ${indexAtivo + 1}`}
                             className="img-fluid rounded"
                             style={{ maxHeight: "90vh", objectFit: "contain" }}
                         />
                     )}
+
+                    {/* Seta direita */}
+                    <Button
+                        variant="link"
+                        className="position-absolute end-0 top-50 translate-middle-y text-white"
+                        onClick={proximaFoto}
+                        style={{ fontSize: "2rem", zIndex: 10 }}
+                    >
+                        <FaChevronRight />
+                    </Button>
                 </Modal.Body>
             </Modal>
 

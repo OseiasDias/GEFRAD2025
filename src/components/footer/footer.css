@@ -1,0 +1,40 @@
+.footerSection {
+    background-color: #1f1f1f;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.footerSection a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footerSection a:hover {
+    color: #A0522D; /* cor terciária */
+}
+
+.footerSection h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.footerSection .socialIcons a {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #303030;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.footerSection .socialIcons a:hover {
+    background: #A0522D;
+    color: #fff;
+}
+.footerSection  {
+    border-top: 15px solid #A0522D; /* cor terciária */
+    }

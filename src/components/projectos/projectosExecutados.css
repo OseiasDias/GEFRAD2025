@@ -40,3 +40,56 @@
 .clickable:hover {
     transform: scale(1.05);
 }
+
+:root {
+    --cor-terciaria: linear-gradient(90deg, #A0522D, #303030);
+}
+
+/* Tabs wrapper */
+.nav-tabs {
+    border-bottom: none; /* Remove linha padrão */
+    justify-content: center; /* Centraliza as tabs */
+    gap: 15px; /* Espaço entre as tabs */
+    margin-bottom: 2rem;
+}
+
+/* Tab links */
+.nav-tabs .nav-link {
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555; /* Cor do texto inativo */
+    background-color: #f8f9fa; /* Fundo neutro para inativas */
+    border-radius: 12px; /* Bordas arredondadas */
+    border: 2px solid #A0522D;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Tab hover */
+.nav-tabs .nav-link:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+/* Tab ativa */
+.nav-tabs .nav-item.show .nav-link, 
+.nav-tabs .nav-link.active {
+    color: #fff;
+    background: var(--cor-terciaria); /* Gradiente da cor terciária */
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Remover borda padrão do Bootstrap no foco */
+.nav-tabs .nav-link:focus {
+    box-shadow: none;
+}
+
+/* Cursor pointer para botões */
+[type=button]:not(:disabled), 
+[type=reset]:not(:disabled), 
+[type=submit]:not(:disabled), 
+button:not(:disabled) {
+    cursor: pointer;
+}
